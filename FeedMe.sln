@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMe.Web", "FeedMe\FeedMe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMe.Repositories", "FeedMe.Repositories\FeedMe.Repositories.csproj", "{06964A0A-FD45-4A50-8A43-D15AEA704B23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedMe.Domains", "FeedMe.Domains\FeedMe.Domains.csproj", "{BFCC59FB-ABFC-4D5E-8725-FE26A03C3958}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMe.Domains", "FeedMe.Domains\FeedMe.Domains.csproj", "{BFCC59FB-ABFC-4D5E-8725-FE26A03C3958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedMe.Services", "FeedMe.Services\FeedMe.Services.csproj", "{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{BFCC59FB-ABFC-4D5E-8725-FE26A03C3958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFCC59FB-ABFC-4D5E-8725-FE26A03C3958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFCC59FB-ABFC-4D5E-8725-FE26A03C3958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

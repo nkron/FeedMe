@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,10 +8,10 @@ namespace FeedMe.Domains
 {
     [Serializable]
     [Table("Users")]
-    public class Users
+    public class User
     {
         [Column("UserID")]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Column("Username")]
         public string Username { get; set; }
@@ -19,10 +20,10 @@ namespace FeedMe.Domains
         public string Password { get; set; }
 
         [Column("FirstName")]
-        public string Fname { get; set; }
+        public string FirstName { get; set; }
 
         [Column("LastName")]
-        public string LName { get; set; }
+        public string LastName { get; set; }
 
         [Column("Email")]
         public string Email { get; set; }
