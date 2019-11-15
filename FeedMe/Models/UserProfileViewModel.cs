@@ -12,17 +12,15 @@ namespace FeedMe.Models
 
         [Display(Name = "First Name")]
         public string FirstName{get; set;}
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         public UserProfileViewModel()
         {            
         }
-        
-        public UserProfileViewModel(UserService userService)
-        {
-            _userService = userService;
-            user = _userService.getByID(1);
-            FirstName = user.FirstName;
-        }
-
     }
 }

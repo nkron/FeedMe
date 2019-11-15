@@ -16,7 +16,12 @@ namespace FeedMe.Controllers
         public IActionResult Index()
         {
             UserProfileViewModel model = new UserProfileViewModel();
-            model.FirstName = _userService.getByID(1).FirstName;
+            var user = _userService.getByID(1);
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            model.Username = user.Username;
+            model.Email = user.Email;
+
             return View(model);
         }
 
