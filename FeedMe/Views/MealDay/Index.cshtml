@@ -1,0 +1,27 @@
+﻿@model FeedMe.Models.MealDayViewModel
+@{
+
+    <div class="row">
+        <div class="h3 col-lg-2">@Html.DisplayFor(model => model.Date)</div>
+    </div>
+    <div class="well">
+    @foreach (var meal in Model.meals)
+    {<div class="row">
+            <div class="col-lg-2">@meal.MealName</div>
+     </div>
+        @foreach (var food in meal.Foods)
+        {
+            <div class="panel">
+                <div class="row">
+                    <div class="col-lg-2">@Html.LabelFor(model => food.FoodName)</div>
+                    <div class="col-lg-3">@Html.DisplayFor(model => food.FoodName)</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">@Html.LabelFor(model => food.Cals)</div>
+                    <div class="col-lg-3">@Html.DisplayFor(model => food.Cals)</div>
+                </div>
+            </div>
+        }
+    }
+    </div>
+}

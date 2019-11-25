@@ -10,14 +10,20 @@ namespace FeedMe.Domains
     [Table("Users")]
     public class User
     {
+        [Column("NormalizedEmail")]
+        public string NormalizedEmail;
+
         [Column("UserID")]
-        public int UserId { get; set; }
+        public int UserID { get; set; }
 
         [Column("Username")]
         public string Username { get; set; }
 
-        [Column("Password")]
-        public string Password { get; set; }
+        [Column("NormalizedUsername")]
+        public string NormalizedUserName { get; set; }
+
+        [Column("PasswordHash")]
+        public string PasswordHash { get; set; }
 
         [Column("FirstName")]
         public string FirstName { get; set; }

@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using FeedMe.Domains
-@inject UserManager<User> UserManager
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -19,40 +16,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FeedMe</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="UserProfile" asp-action="Index">My Profile</a></li>
-                    <li><a asp-area="" asp-controller="MealDay" asp-action="Index">My Meals</a></li>
-                    <li class="pull-right"><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li class="pull-right"><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-
-                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a asp-area="" asp-controller="UserProfile" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-                        </li>
-                        <li>
-                            <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
-                        </li>
-                    </ul>
-                </form>
-            </div>
-            </div>
-    </nav>
+<body>    
 
     @*<partial name="_CookieConsentPartial" />*@
 

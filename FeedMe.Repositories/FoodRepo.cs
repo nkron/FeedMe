@@ -18,22 +18,34 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
-        public IEnumerable<Food> GetMealFoods(int MealID)
+        public IEnumerable<Food> GetMealFoods(int mealID)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
-                var output = connection.Query<Food>("select * from Foods inner join MealFoods on MealFoods.FoodID = Foods.FoodID where MealFoods.MealID =" + MealID + ";");
+                var output = connection.Query<Food>("dbo.GetFoods @MealID ", new { MealID = mealID});
                 return output;
             }
         }
 
-        public bool AddMealFoods(int MealID, IEnumerable<Food> foodList)
+        public IEnumerable<Food> AddFood(Food f)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
                 var output = connection.Query<Food>("");
-                return true;
+                return output;
             }
         }
+
+        //public bool AddMealFoods(int mealID, List<int> foodIDs)
+        //{
+        //    using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+        //    {
+        //        foreach(int i in foodIDs){
+        //            connection.Execute(("dbo.AddMealFood @MealID, @FoodID", new { MealID = mealID, FoodID = i }));
+        //        }
+        //        var output = connection.Query(("dbo.GetUser @UserID", new { meal = ID }));
+        //        return true;
+        //    }
+        //}
     }
 }

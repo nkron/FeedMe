@@ -1,0 +1,24 @@
+﻿@page
+@model FeedMe.Models.MealDetailsViewModel
+@{
+    <div class="row">
+        <div class="col-lg-2">@Html.LabelFor(model => model.MealName)</div>
+        <div class="col-lg-2">@Html.DisplayFor(model => model.MealName)</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">@Html.LabelFor(model => model.Cals)</div>
+        <div class="col-lg-2">@Html.DisplayFor(model => model.Cals)</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">@Html.LabelFor(model => model.MacC)</div>
+        <div class="col-lg-2">@Html.DisplayFor(model => model.MacC)</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">@Html.LabelFor(model => model.MacP)</div>
+        <div class="col-lg-2">@Html.DisplayFor(model => model.MacP)</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">@Html.LabelFor(model => model.MacF)</div>
+        <div class="col-lg-2">@Html.DisplayFor(model => model.MacF)</div>
+    </div>
+}

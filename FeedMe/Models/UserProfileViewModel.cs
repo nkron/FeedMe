@@ -7,9 +7,6 @@ namespace FeedMe.Models
 {
     public class UserProfileViewModel
     {
-        UserService _userService;
-        User user;
-
         [Display(Name = "First Name")]
         public string FirstName{get; set;}
         [Display(Name = "Last Name")]
@@ -19,8 +16,5 @@ namespace FeedMe.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        public UserProfileViewModel()
-        {            
-        }
     }
 }

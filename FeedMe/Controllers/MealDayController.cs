@@ -5,33 +5,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FeedMe.Models;
+using FeedMe.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FeedMe.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class MealDayController : Controller
     {
+        private readonly MealService _mealService;
+        private readonly FoodService _foodService;
+
         public IActionResult Index()
         {
-            return View();
+            MealDayViewModel model = new MealDayViewModel(_mealService,_foodService, 1, DateTime.Today);
+            return View(model);
         }
 
-        public IActionResult About()
+        public MealDayController(MealService mealService, FoodService foodService)
         {
-            ViewData["Message"] = "I MADE THIS";
-
-            return View();
+            _mealService = mealService;
+            _foodService = foodService;
         }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "it is me";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
+        public ActionResult DoSomething()
         {
             return View();
         }

@@ -1,6 +1,7 @@
 ﻿@page
 @model FeedMe.Models.UserProfileViewModel
 @{
+<div class="container well" style="margin-top:30px">
     <div class="row">
         <div class="col-lg-2">@Html.LabelFor(model => model.Username)</div>
         <div class="col-lg-2">@Html.DisplayFor(model => model.Username)</div>
@@ -17,4 +18,5 @@
         <div class="col-lg-2">@Html.LabelFor(model => model.Email)</div>
         <div class="col-lg-2">@Html.DisplayFor(model => model.Email)</div>
     </div>
+</div>
         }

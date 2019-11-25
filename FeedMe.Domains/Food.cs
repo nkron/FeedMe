@@ -11,7 +11,7 @@ namespace FeedMe.Domains
     public class Food
     {
         [Column("FoodID")]
-        public int UserId { get; set; }
+        public int FoodID { get; set; }
 
         [Column("FoodName")]
         public string FoodName { get; set; }

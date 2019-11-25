@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FeedMe.Models;
 using FeedMe.Services;
+using Microsoft.AspNetCore.Identity;
+using FeedMe.Domains;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FeedMe.Controllers
 {
+    [Authorize]
     public class UserProfileController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly UserService _userService;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             UserProfileViewModel model = new UserProfileViewModel();
-            var user = _userService.getByID(1);
-            model.FirstName = user.FirstName;
+            var user = await _userManager.GetUserAsync(User);
+            model.FirstName = user.Username;
             model.LastName = user.LastName;
             model.Username = user.Username;
             model.Email = user.Email;
@@ -25,16 +30,10 @@ namespace FeedMe.Controllers
             return View(model);
         }
 
-        public UserProfileController(UserService userService)
+        public UserProfileController(UserService userService, UserManager<User> userManager)
         {
+            _userManager = userManager;
             _userService = userService;
-        }
-        public ActionResult DoSomething()
-        {
-            UserProfileViewModel model = new UserProfileViewModel();
-            model.FirstName = _userService.getByID(1).LastName;
-
-            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

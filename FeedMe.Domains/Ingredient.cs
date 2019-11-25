@@ -7,14 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FeedMe.Domains
 {
     [Serializable]
-    [Table("Meals")]
-    public class Meal
+    [Table("Ingredients")]
+    public class Ingredient
     {
-        [Column("MealID")]
-        public int MealID { get; set; }
+        [Column("IngID")]
+        public int IngID { get; set; }
 
-        [Column("MealName")]
-        public string MealName { get; set; }
+        [Column("IngName")]
+        public string IngName { get; set; }
 
         [Column("MacC")]
         public int MacC { get; set; }

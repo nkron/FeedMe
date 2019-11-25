@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FeedMe.Services;
 using FeedMe.Repositories;
+using Microsoft.AspNetCore.Identity;
+using FeedMe.Domains;
 
 namespace FeedMe
 {
@@ -34,7 +36,16 @@ namespace FeedMe
             });
             services.AddTransient<UserRepo>();
             services.AddTransient<UserService>();
-
+            services.AddTransient<MealService>();
+            services.AddTransient<MealRepo>();
+            services.AddTransient<FoodRepo>();
+            services.AddTransient<FoodService>();
+            services.AddTransient<IngRepo>();
+            services.AddTransient<IngService>();
+            services.AddTransient<IUserStore<User>, UserRepo>();
+            services.AddTransient<IRoleStore<UserRole>, RoleRepo>();
+            services.AddIdentity<User,UserRole>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -55,12 +66,12 @@ namespace FeedMe
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }
