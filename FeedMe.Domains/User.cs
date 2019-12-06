@@ -30,8 +30,13 @@ namespace FeedMe.Domains
 
         [Column("LastName")]
         public string LastName { get; set; }
-
-        [Column("Email")]
-        public string Email { get; set; }
+        [Column("TargetCals")]
+        public int TargetCals { get; set; }
+        [Column("TargetMacC")]
+        public int TargetMacC { get; set; }
+        [Column("TargetMacP")]
+        public int TargetMacP { get; set; }
+        [Column("TargetMacF")]
+        public int TargetMacF { get; set; }
     }
 }

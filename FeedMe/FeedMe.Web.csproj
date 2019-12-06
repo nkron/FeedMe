@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>3378214b-f6fd-43fa-abf6-0725bb42c9be</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,11 +11,27 @@
 
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.4.1" />
     <PackageReference Include="EntityFramework" Version="6.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
@@ -26,6 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\MealDay\IndexEditabe.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\_DisplayFoodDetails.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

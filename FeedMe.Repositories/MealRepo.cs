@@ -37,6 +37,21 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
+        public void RemoveUserMeal(int userID, int mealID, DateTime date)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                var param = new DynamicParameters();
+                param.Add("@UserID", userID, DbType.Int32);
+                param.Add("@DateUsed", date, DbType.Date);
+                param.Add("@MealID", mealID, DbType.Int32);
+
+                connection.Execute(
+                    "dbo.RemoveUserMeal",
+                    param,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
 
         public async Task<IEnumerable<Meal>> GetUserMealsByDate(int ID, DateTime date)
         {
@@ -51,35 +66,12 @@ namespace FeedMe.Repositories
                     param,
                     commandType: CommandType.StoredProcedure);
 
-                //string cleanDate = date.Year.ToString()+"-"+ + date.Month +"-"+ date.Day;
-                //var output = connection.Query<Meal>("dbo.GetUserMealsByDate @UserID @DateUsed", new { UserID = ID , DateUsed = date});
                 return output;
             }
         }
 
-        public IEnumerable<Meal> AddToHistory(int ID)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
-            {
-                var output = connection.Query<Meal>("");
-                return output;
-            }
-        }
-        public IEnumerable<Meal> GetFavorites(int ID)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
-            {
-                var output = connection.Query<Meal>("select * from Meals inner join FavoriteMeals on Meals.MealID = FavoriteMeals.MealID where FavoriteMeals.UserID =" + ID + ";");
-                return output;
-            }
-        }
-        public IEnumerable<Meal> AddToFavorites(int ID)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
-            {
-                var output = connection.Query<Meal>("select * from Meals inner join FavoriteMeals on Meals.MealID = FavoriteMeals.MealID where FavoriteMeals.UserID =" + ID + ";");
-                return output;
-            }
-        }
+
+
+
     }
 }

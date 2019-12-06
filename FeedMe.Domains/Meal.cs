@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FeedMe.Domains.Enumerations;
 
 namespace FeedMe.Domains
 {
@@ -30,5 +31,8 @@ namespace FeedMe.Domains
 
         [Column("DateCreated")]
         public DateTime DateCreated { get; set; }
+
+        [Column("MealTypeID")]
+        public MealTypes MealTypeID { get; set; }
     }
 }

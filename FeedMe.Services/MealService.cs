@@ -21,5 +21,10 @@ namespace FeedMe.Services
         {
             return _mealRepo.GetUserMealsByDate(UserID, dateUsed).Result;
         }
+
+        public void removeUserMeal(int UserID, int MealID, DateTime dateUsed)
+        {
+            _mealRepo.RemoveUserMeal(UserID, MealID, dateUsed);
+        }
     }
 }

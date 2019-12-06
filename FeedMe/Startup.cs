@@ -44,8 +44,15 @@ namespace FeedMe
             services.AddTransient<IngService>();
             services.AddTransient<IUserStore<User>, UserRepo>();
             services.AddTransient<IRoleStore<UserRole>, RoleRepo>();
-            services.AddIdentity<User,UserRole>()
+            services.AddIdentity<User, UserRole>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+            options.ClientId = Configuration["Google:ClientID"];
+            options.ClientSecret = Configuration["Google:ClientSecret"];
+        });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

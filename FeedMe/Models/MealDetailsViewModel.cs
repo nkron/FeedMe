@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FeedMe.Domains;
+using FeedMe.Domains.Enumerations;
 using FeedMe.Services;
 
 namespace FeedMe.Models
@@ -46,7 +47,7 @@ namespace FeedMe.Models
         [Display(Name = "Date Created:")]
         public DateTime DateCreated { get; set; }
 
-        public int MealSlot { get; set; }
+        public MealTypes Type { get; set; }
         public List<FoodViewModel> Foods { get; set; }
 
         public void LoadData(Meal m)
@@ -56,18 +57,20 @@ namespace FeedMe.Models
             MacC = m.MacC;
             MacF = m.MacF;
             MacP = m.MacP;
-            Cals = m.Cals;
             DateCreated = m.DateCreated;
-            //Meal slot?
+            Type = m.MealTypeID;
+            
             
             //Put each food in a foodviewmodel
             var f = _FoodService.getMealFoods(m.MealID);
             Foods = new List<FoodViewModel>();
             foreach (Food i in f){
+                Cals += i.Cals;
+                MacF += i.MacF;
+                MacP += i.MacP;
+                MacC += i.MacC;
                 Foods.Add(new FoodViewModel(i));                
-            }         
-                
-
+            }                         
         }
     }
 

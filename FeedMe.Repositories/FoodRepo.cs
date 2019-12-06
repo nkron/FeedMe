@@ -36,6 +36,22 @@ namespace FeedMe.Repositories
             }
         }
 
+        public IEnumerable<Meal> GetFavorites(int ID)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                var output = connection.Query<Meal>("select * from Foods inner join FavoriteFoods on Foods.FoodID = FavoriteFoods.FoodID where FavoriteFoods.UserID =" + ID + ";");
+                return output;
+            }
+        }
+        public IEnumerable<Meal> AddToFavorites(int ID)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                var output = connection.Query<Meal>("select * from Foods inner join FavoriteFoods on Foods.FoodID = FavoriteFoods.FoodID where FavoriteFoods.UserID =" + ID + ";");
+                return output;
+            }
+        }
         //public bool AddMealFoods(int mealID, List<int> foodIDs)
         //{
         //    using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))

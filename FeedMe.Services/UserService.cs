@@ -2,6 +2,7 @@
 using FeedMe.Repositories;
 using FeedMe.Domains;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FeedMe.Services
 {
@@ -21,6 +22,11 @@ namespace FeedMe.Services
         public User getByID(int ID)
         {
             return _userRepo.GetByID(ID);
+        }
+
+        public Task UpdateAsync(User user)
+        {
+            return _userRepo.UpdateAsync(user);
         }
     }
 }

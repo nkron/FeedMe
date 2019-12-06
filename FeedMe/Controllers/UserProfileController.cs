@@ -19,13 +19,9 @@ namespace FeedMe.Controllers
         private readonly UserService _userService;
 
         public async Task<IActionResult> Index()
-        {
-            UserProfileViewModel model = new UserProfileViewModel();
+        {            
             var user = await _userManager.GetUserAsync(User);
-            model.FirstName = user.Username;
-            model.LastName = user.LastName;
-            model.Username = user.Username;
-            model.Email = user.Email;
+            UserProfileViewModel model = new UserProfileViewModel(user);
 
             return View(model);
         }
@@ -40,6 +36,17 @@ namespace FeedMe.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Update(UserProfileViewModel model)
+        {
+            if (ModelState.IsValid) {
+                
+                await _userService.UpdateAsync(new User { FirstName = model.FirstName, LastName = model.LastName, TargetCals=model.TargetCals,
+                TargetMacC =model.TargetMacC,TargetMacF=model.TargetMacF,TargetMacP=model.TargetMacP, UserID= Convert.ToInt32(_userManager.GetUserId(User))});
+
+            }
+            return View("index",model);
         }
     }
 }

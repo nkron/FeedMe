@@ -26,6 +26,7 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
+
         public User GetByID(int ID)
         {
 
@@ -69,9 +70,9 @@ namespace FeedMe.Repositories
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
                 await connection.OpenAsync(cancellationToken);
-                user.UserID = await connection.QuerySingleAsync<int>($@"INSERT INTO [Users] ([Username], [NormalizedUserName], [Email],
+                user.UserID = await connection.QuerySingleAsync<int>($@"INSERT INTO [Users] ([Username], [NormalizedUserName],
                     [PasswordHash])
-                    VALUES (@{nameof(User.Username)}, @{nameof(User.NormalizedUserName)}, @{nameof(User.Email)},
+                    VALUES (@{nameof(User.Username)}, @{nameof(User.NormalizedUserName)},
                      @{nameof(User.PasswordHash)});
                     SELECT CAST(SCOPE_IDENTITY() as int)", user);
             }
@@ -79,9 +80,29 @@ namespace FeedMe.Repositories
             return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(User u)
         {
-            throw new NotImplementedException();
+            //cancellationToken.ThrowIfCancellationRequested();
+  
+            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                var param = new DynamicParameters();
+                param.Add("@UserID", u.UserID, DbType.Int32);
+                param.Add("@FirstName", u.FirstName, DbType.String);
+                param.Add("@LastName", u.LastName, DbType.String);    
+                param.Add("@TargetCals", u.TargetCals, DbType.Int32);
+                param.Add("@TargetMacC", u.TargetMacC, DbType.Int32);
+                param.Add("@TargetMacP", u.TargetMacP, DbType.Int32);
+                param.Add("@TargetMacF", u.TargetMacF, DbType.Int32);
+
+                await connection.OpenAsync();
+                await connection.ExecuteAsync(
+                    "dbo.UpdateUser",
+                    param,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
@@ -128,6 +149,11 @@ namespace FeedMe.Repositories
         }
 
         public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -8,8 +8,8 @@ namespace FeedMe.Models
 {
     public class FoodViewModel
     {
-        FoodService _FoodService;
-        IngService _IngService;
+        private readonly FoodService _FoodService;
+        private readonly IngService _IngService;
         public FoodViewModel(FoodService foodService, IngService ingService)
         {
             _FoodService = foodService;
@@ -41,7 +41,6 @@ namespace FeedMe.Models
         [Display(Name = "Date Created:")]
         public DateTime DateCreated { get; set; }
 
-        public int FoodSlot { get; set; }
         public IEnumerable<Ingredient> Ingredients { get; set; }
 
         public void LoadData(Food f)
