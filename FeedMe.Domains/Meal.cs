@@ -33,6 +33,6 @@ namespace FeedMe.Domains
         public DateTime DateCreated { get; set; }
 
         [Column("MealTypeID")]
-        public MealTypes MealTypeID { get; set; }
+        public MealType MealTypeID { get; set; }
     }
 }

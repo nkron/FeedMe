@@ -11,20 +11,6 @@
 
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.min.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.min.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap.min.css.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.js" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.js.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.min.js" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.bundle.min.js.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.js" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.js.map" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js" />
-    <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,15 +32,16 @@
     <Content Update="Views\MealDay\IndexEditabe.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Shared\_DisplayFoodDetails.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\MealDay\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\UserProfile\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\Datepicker\" />
   </ItemGroup>
 
 </Project>

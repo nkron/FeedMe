@@ -27,7 +27,7 @@ namespace FeedMe.Models
         {
             LoadData(m);
         }
-        protected int MealID { get; set; }
+        public int MealID { get; set; }
 
         [Display(Name = "Meal Name ")]
         public string MealName{ get; set; }
@@ -47,12 +47,13 @@ namespace FeedMe.Models
         [Display(Name = "Date Created:")]
         public DateTime DateCreated { get; set; }
 
-        public MealTypes Type { get; set; }
+        public MealType Type { get; set; }
         public List<FoodViewModel> Foods { get; set; }
 
         public void LoadData(Meal m)
         {
             //Put meal data in local vars
+            MealID = m.MealID;
             MealName = m.MealName;
             MacC = m.MacC;
             MacF = m.MacF;

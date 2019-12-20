@@ -32,6 +32,13 @@ namespace FeedMe.Controllers
             MealDayViewModel model = new MealDayViewModel(_mealService,_foodService,user , DateTime.Today);
             return View(model);
         }
+        public async Task<IActionResult> GoToDate(string date)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            MealDayViewModel model = new MealDayViewModel(_mealService, _foodService, user, Convert.ToDateTime(date));
+            return View("Index",model);
+        }
         public async Task<IActionResult> NextDay(MealDayViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -49,16 +56,6 @@ namespace FeedMe.Controllers
             return View("Index", model);
         }
 
-        public async Task<IActionResult> DeleteMeal(MealDayViewModel model, int mealID)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            DateTime dt = Convert.ToDateTime(model.Date);
-            _mealService.removeUserMeal(user.UserID, mealID, dt);
-
-            model = new MealDayViewModel(_mealService, _foodService, user,dt);
-            return View("Index", model);
-        }
         public async Task<IActionResult> DeleteMealFood(MealDayViewModel model, int mealID)
         {
             var user = await _userManager.GetUserAsync(User);

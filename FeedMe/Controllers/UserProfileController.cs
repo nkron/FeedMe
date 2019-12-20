@@ -41,10 +41,15 @@ namespace FeedMe.Controllers
         public async Task<IActionResult> Update(UserProfileViewModel model)
         {
             if (ModelState.IsValid) {
-                
+                try { 
                 await _userService.UpdateAsync(new User { FirstName = model.FirstName, LastName = model.LastName, TargetCals=model.TargetCals,
                 TargetMacC =model.TargetMacC,TargetMacF=model.TargetMacF,TargetMacP=model.TargetMacP, UserID= Convert.ToInt32(_userManager.GetUserId(User))});
+                }
+                catch(Exception e)
+                {
 
+                }
+                ViewBag.Success = "Profile successfully updated!";
             }
             return View("index",model);
         }

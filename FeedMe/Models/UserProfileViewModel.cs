@@ -13,13 +13,15 @@ namespace FeedMe.Models
         public string LastName { get; set; }
         [Display(Name = "Username")]
         public string Username { get; set; }
-
+        [Display(Name = "Calories:")]
         public int TargetCals { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
+        [Display(Name = "Carbs:")]
         public int TargetMacC { get; set; }
-
+        [Display(Name = "Fat:")]
         public int TargetMacF { get; set; }
-
+        [Display(Name = "Protein:")]
         public int TargetMacP { get; set; }
 
         public UserProfileViewModel(User u)

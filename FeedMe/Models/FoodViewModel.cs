@@ -21,7 +21,7 @@ namespace FeedMe.Models
             LoadData(food);
         }
 
-        protected int FoodID { get; set; }
+        public int FoodID { get; set; }
 
         [Display(Name = "Food Name ")]
         public string FoodName{ get; set; }
@@ -46,6 +46,7 @@ namespace FeedMe.Models
         public void LoadData(Food f)
         {
             //Load food data into local vars
+            FoodID = f.FoodID;
             FoodName = f.FoodName;
             MacC = f.MacC;
             MacF = f.MacF;

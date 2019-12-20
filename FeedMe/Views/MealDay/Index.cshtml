@@ -1,6 +1,9 @@
 ﻿@model FeedMe.Models.MealDayViewModel
 @using FeedMe.Domains.Enumerations
 @{
+<head>
+    <link href="~/lib/Datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+</head>
     <style>
         .card-header {
             padding: .85rem 1.25rem;
@@ -56,6 +59,10 @@
             letter-spacing: 0.5px;
             color: #2d303c;
             display: inline;
+        }
+        .dateTxt {
+            text-align: center;
+            border: none;
         }
     </style>
     <div class="row">
@@ -114,7 +121,7 @@
                     bool mealExists = false;
                     foreach (var meal in Model.meals)
                     {
-                        if (meal.Type == MealTypes.Breakfast)
+                        if (meal.Type == MealType.Breakfast)
                         {
                             <div class="row">
                                 <div class="card">
@@ -131,7 +138,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +155,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 1})'">
                                 </div>
                             </div>
                         </div>
@@ -157,7 +164,7 @@
                     mealExists = false;
                     foreach (var meal in Model.meals)
                     {
-                        if (meal.Type == MealTypes.Lunch)
+                        if (meal.Type == MealType.Lunch)
                         {
                             <div class="row">
                                 <div class="card">
@@ -174,7 +181,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +198,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                 </div>
                             </div>
                         </div>
@@ -200,7 +207,7 @@
                     mealExists = false;
                     foreach (var meal in Model.meals)
                     {
-                        if (meal.Type == MealTypes.Dinner)
+                        if (meal.Type == MealType.Dinner)
                         {
                             <div class="row">
                                 <div class="card">
@@ -217,7 +224,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +242,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                 </div>
                             </div>
                         </div>
@@ -244,7 +251,7 @@
                     mealExists = false;
                     foreach (var meal in Model.meals)
                     {
-                        if (meal.Type == MealTypes.Snack)
+                        if (meal.Type == MealType.Snack)
                         {
                             <div class="row">
                                 <div class="card">
@@ -261,7 +268,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                        <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +284,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("AddFood", "MealDay", Model)'">
+                                    <input type="button" value="Add Food" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                 </div>
                             </div>
                         </div>
@@ -285,7 +292,9 @@
                 }
             </div>
         </div>
-        @*<div class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-lg-pull-0 col-md-pull-0 col-sm-pull-7 col-xs-pull-7">*@
-
     </div>
 }
+<script>
+    $('.dateTxt input').datepicker({
+    });
+</script>
