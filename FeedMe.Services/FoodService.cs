@@ -24,15 +24,20 @@ namespace FeedMe.Services
             return _FoodRepo.GetMealFoods(MealID);
         }
 
-        public async Task<IEnumerable<Food>> Search(string searchName, MealType searchType)
+        public async Task<IEnumerable<Food>> Search(string searchName, MealType searchType, int calsMin, int calsMax)
         {
-            return await _FoodRepo.Search(searchName, searchType);
+            return await _FoodRepo.Search(searchName, searchType, calsMin, calsMax);
         }
 
-        public async void AddFoodToMeal(string date, string mealType, int foodID)
+        public void AddFoodToMeal(string date, int mealType, int foodID, int userID)
         {
-            await _FoodRepo.AddFoodToMeal(date, mealType, foodID);
+            _FoodRepo.AddFoodToMeal(date, mealType, foodID, userID);
             return;
+        }
+
+        public void UpdateFood(string foodName, int cals, int? macC, int? macF, int? macP, int? foodID)
+        {
+            _FoodRepo.UpdateFood(foodName, cals, macC, macF, macP, foodID);
         }
     }
 }

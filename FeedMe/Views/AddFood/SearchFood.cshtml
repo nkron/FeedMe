@@ -4,50 +4,59 @@
 @using (Html.BeginForm("Search", "AddFood", FormMethod.Get))
 {
     <h1>Add Food to @Model.Date</h1>
-    <div class="form-horizontal">
+    <form>
         <h2>Food Search</h2>
-        <row>
-            <div class="col-md-4 col-sm-4 col-xs-4">@Html.TextBoxFor(model => model.SearchName)</div>
-            <div class="col-md-4 col-sm-4 col-xs-4">
-                @Html.DropDownListFor(m => m.MealType, Model.GetTypes())
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-4">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </row>
-        <div class="form-group">
-            <table class="table">
-                @foreach (var item in Model.Results)
-                {
-                    <tr>
-                        <td>
-                            @item.FoodName
-                        </td>
-                        <td>
-                            @item.Cals
-                        </td>
-                        <td>
-                            @Html.ActionLink("AddFood", "AddToMeal", "AddFood", new { foodID = item.FoodID }, null)
-                        </td>
-                    </tr>
-                }
-            </table>
+        <row onload="setDropdown()">
+            
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SearchName)
+                        @Html.TextBoxFor(model => model.SearchName)
+                    </div>
+                </div><div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CalsMin)
+                        @Html.TextBoxFor(model => model.CalsMin)
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CalsMax)
+                        @Html.TextBoxFor(model => model.CalsMax)
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.DropDownListFor(m => m.MealType, Model.GetTypes(), null, new { htmlAttributes = new { id = "TypeDropDown" } })
+                    </div>
+                    </div>
+                
+                <row>
+                    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-2">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-2">
+                        <button asp-controller="AddFood" asp-action="SearchClear">Clear</button>
+                    </div>
+                </row>
 
-            @*@if (Model.Results != null)
-                {
-                int i = 0;
-                while (i < Model.Results.Count)
-                {
-                    if (i % 3 == 0 || i == 0)//if a row has 3 columns or is the first row, new row
+            <div class="form-group">
+                <table class="table">
+                    @foreach (var item in Model.Results)
                     {
+                        <tr>
+                            <td>
+                                @item.FoodName
+                            </td>
+                            <td>
+                                @item.Cals
+                            </td>
+                            <td>
+                                @Html.ActionLink("AddFood", "AddToMeal", "AddFood", new { foodID = item.FoodID }, null)
+                            </td>
+                        </tr>
                     }
-                }
-                @for (int j = 0; j < i; j++)//add closing divs for rows
-                {
-
-                }
-                }*@
-
-        </div>
-    </div>
+                </table>
+            </div>
+</form>
 }

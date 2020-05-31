@@ -1,0 +1,123 @@
+﻿.card-header {
+    padding: .75rem 0 .2rem 1.25rem;
+    margin-bottom: 0;
+    background-color: white;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Avenir, "Lato", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.card-subheader {
+    padding-left: 1.25rem;
+    font-size: 13px;
+    font-weight: 400;
+}
+.card-footer:last-child {
+    border-radius: 0 0 calc(.25rem - 1px) calc(.25rem - 1px);
+}
+
+.card-footer {
+    padding: 0 1rem .50rem 1rem;
+    background-color: white;
+    border-top: 0 white;
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem 0;
+}
+
+.card {
+    margin-top: 10px;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    box-shadow: 1px 1px 2px 1px grey;
+}
+
+.food {
+    padding: 1.5rem .6rem;
+    margin: .1rem;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: border .5s;
+    text-decoration: none;
+}
+    .food:hover {
+        border: 2px solid #c7ebc0;
+        transition: border .5s linear;
+
+    }
+.foodDetails {
+    opacity: 0;
+    transition: opacity .5s linear;
+}
+.food:hover .foodDetails {
+    opacity: 1;
+    transition: opacity .5s linear;
+}
+
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.foodName {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #2d303c;
+    display: inline;
+}
+
+.dateTxt {
+    text-align: center;
+    border: none;
+}
+
+.PlannerHeaderRow {
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-color: #4caf50;
+    background-color: #e7ede6;
+    padding-left: 8em;
+    padding-top:.5em;
+}
+.PlannerHeader {
+    font-size: 28px;
+    font-weight: 600;
+    font-family: Avenir, "Lato", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.day {
+    font-size: 58px;
+    font-family: Avenir, "Lato", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 45px;
+}
+
+.content {
+    padding-top:2em;
+}
+
+.btn-date {
+    font-size: 22px;
+    box-shadow: none;
+    border-color: gray !important;
+    border-style: solid !important;
+    padding: 2px 18px;
+    border: 1px;
+    margin: 0 1px;
+}
+.btn-text {
+padding: 5.5px 14px;
+font-size:16px;
+}

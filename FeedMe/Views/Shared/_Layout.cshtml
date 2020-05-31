@@ -2,41 +2,44 @@
 @using FeedMe.Domains
 @inject UserManager<User> UserManager
 <!DOCTYPE html>
-<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FeedMe</title>
-
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/css/site.css" rel="stylesheet" />
-    </environment>
-
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+        <!-- Place your kit's code here -->
+        <script src="https://kit.fontawesome.com/16e0633fe8.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico" />
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div class="container-fluid" style="background-color: #f9f9f9;">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-header">
+                <img alt="Qries" class="navbar-left logo" src="~/images/monsterSm.png" width="50" height="44">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FeedMe</a>
+
+
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand feedMePrimary home">Feed</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand feedMeTertiary home">Me</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="MealPlanner" asp-action="Index">Meal Planner</a></li>
                     <li><a asp-area="" asp-controller="UserProfile" asp-action="Index">My Profile</a></li>
-                    <li><a asp-area="" asp-controller="MealDay" asp-action="Index">My Meals</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
 
                 <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right" style="padding-right:50px">
                         <li>
                             <a asp-area="" asp-controller="UserProfile" asp-action="Index" title="Manage" class="hidden-xs">Hello @UserManager.GetUserName(User)!</a>
                         </li>
@@ -46,17 +49,18 @@
                     </ul>
                 </form>
             </div>
+
+        </nav>
+       
+        <div class="body-content col-lg-12">
+            @RenderBody()
+            <hr />
+            @*<footer>
+                <p>&copy; 2020 - FeedMe</p>
+            </footer>*@
         </div>
-    </nav>
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2019 - FeedMe</p>
-        </footer>
     </div>
-
+</body>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -79,5 +83,4 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
-</body>
-</html>
+

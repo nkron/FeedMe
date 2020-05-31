@@ -13,13 +13,13 @@ using FeedMe.Domains;
 namespace FeedMe.Controllers
 {
     [Authorize]
-    public class MealDayController : Controller
+    public class MealPlannerController : Controller
     {
         private readonly MealService _mealService;
         private readonly FoodService _foodService;
         private readonly UserManager<User> _userManager;
 
-        public MealDayController(MealService mealService, FoodService foodService, UserManager<User> userManager)
+        public MealPlannerController(MealService mealService, FoodService foodService, UserManager<User> userManager)
         {
             _mealService = mealService;
             _foodService = foodService;
@@ -29,41 +29,48 @@ namespace FeedMe.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            MealDayViewModel model = new MealDayViewModel(_mealService,_foodService,user , DateTime.Today);
+            MealPlannerViewModel model = new MealPlannerViewModel(_mealService,_foodService,user , DateTime.Today);
             return View(model);
         }
         public async Task<IActionResult> GoToDate(string date)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            MealDayViewModel model = new MealDayViewModel(_mealService, _foodService, user, Convert.ToDateTime(date));
+            MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, Convert.ToDateTime(date));
             return View("Index",model);
         }
-        public async Task<IActionResult> NextDay(MealDayViewModel model)
+        public async Task<IActionResult> NextDay(MealPlannerViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
 
             DateTime dt = Convert.ToDateTime(model.Date).AddDays(1);
-            model = new MealDayViewModel(_mealService, _foodService, user, dt);
+            model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index",model);
         }
-        public async Task<IActionResult> PreviousDay(MealDayViewModel model)
+        public async Task<IActionResult> PreviousDay(MealPlannerViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
 
             DateTime dt = Convert.ToDateTime(model.Date).AddDays(-1);
-            model = new MealDayViewModel(_mealService, _foodService, user, dt);
+            model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }
+        public async Task<IActionResult> Today(MealPlannerViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
 
-        public async Task<IActionResult> DeleteMealFood(MealDayViewModel model, int mealID)
+            DateTime dt = Convert.ToDateTime(DateTime.Today);
+            model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
+            return View("Index", model);
+        }
+        public async Task<IActionResult> DeleteMealFood(MealPlannerViewModel model, int mealID)
         {
             var user = await _userManager.GetUserAsync(User);
 
             DateTime dt = Convert.ToDateTime(model.Date);
             _mealService.removeUserMeal(user.UserID, mealID, dt);
 
-            model = new MealDayViewModel(_mealService, _foodService, user, dt);
+            model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }
 

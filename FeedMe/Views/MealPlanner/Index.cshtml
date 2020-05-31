@@ -1,0 +1,308 @@
+﻿@model FeedMe.Models.MealPlannerViewModel
+@using FeedMe.Domains.Enumerations
+@{
+    <head>
+        <link rel="stylesheet" href="~/css/planner.css" />
+
+        <script language="C#" runat="server">
+
+            void ImageButton_Click(object sender, ImageClickEventArgs e)
+            {
+               Label1.Text = "You clicked the ImageButton control at the coordinates: (" +
+                             e.X.ToString() + ", " + e.Y.ToString() + ")";
+            }
+
+        </script>
+    </head>
+    <div class="row">
+        <div class="row PlannerHeaderRow">
+            <div class="PlannerHeader"><span class="feedMePrimary">Meal Planner</span>&nbsp&nbsp<span>@Model.Month @Model.Year</span></div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 vertical-center center-block text-center h4" style="padding-left:0">
+                    <button class="button btn-date" onclick="location.href='@Url.Action("PreviousDay", "MealPlanner", Model)'">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="button btn-date btn-text" onclick="location.href='@Url.Action("Today", "MealPlanner", Model)'">
+                        <i aria-hidden="true"> Jump to Today</i>
+                    </button>
+                    <button class="button btn-date" onclick="location.href='@Url.Action("NextDay", "MealPlanner", Model)'">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                    <button class="button btn-date" onclick="location.href='@Url.Action("NextDay", "MealPlanner", Model)'">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-lg-push-7 col-md-push-7 col-lg-offset-1 col-md-offset-1 content" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
+            @{ if (Model.meals.Count != 0)
+                {
+            <div class="row text-center"><h6>Macros by Percentage:</h6></div>
+                }
+             }            
+            <div class="row" style="padding-bottom:2em;">
+                <div id="chartContainer"></div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="test">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        Current totals
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><b>Calories</b></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right"><b>@Model.totalCals</b></div>
+                </div>
+                <div class="row MacC">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 MacC"><span class="MacC">Carbs</span></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right MacC">@Model.totalMacC<span>g</span></div>
+                </div>
+                <div class="row MacP">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Protein</div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">@Model.totalMacP<span>g</span></div>
+                </div>
+                <div class="row MacF">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Fat</div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">@Model.totalMacF<span>g</span></div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                <div class="row text-center">
+                    <div class="col-12 nutrition-header small_bottom_spacer pr-0">
+                        Targets <a asp-action="Index" asp-controller="UserProfile" style="font-size:10px">(Edit)</a>
+                    </div>
+                </div>
+                <div class="targets-col col-lg-12 col-md-12 col-sm-12 col-xs-12">@Model.targetCals</div>
+                <div class="targets-col col-lg-12 col-md-12 col-sm-12 col-xs-12">@Model.targetMacCTotal<span>g</span></div>
+                <div class="targets-col col-lg-12 col-md-12 col-sm-12 col-xs-12">@Model.targetMacPTotal<span>g</span></div>
+                <div class="targets-col col-lg-12 col-md-12 col-sm-12 col-xs-12">@Model.targetMacFTotal<span>g</span></div>
+            </div>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 col-lg-pull-4 col-md-pull-4 content" style="padding-left:20em;">
+            <div class="row" style="text-align:center">
+                <div class="col-lg-1">
+                    <span class="dayWord feedMePrimary">@Model.DayWord</span>
+                    <br />
+                    <span class="day feedMePrimary">@Model.Day</span>
+                </div>
+            </div>
+            <div>
+                @{
+                    bool mealExists = false;
+                    foreach (var meal in Model.meals)
+                    {
+                        if (meal.MealType == 1)
+                        {
+                            <div class="row">
+                                <div class="card">
+                                    <h4 class="card-header"><span>Breakfast</span></h4>
+                                    <br>
+                                    <span class="card-subheader">@meal.Cals Calories</span>
+                                    <div class="card-body">
+                                        @foreach (var food in meal.Foods)
+                                        {
+                                            <div class="row food">
+                                                <div class="col-lg-5 foodName">
+                                                    <span data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" data-title=@food.FoodName ; data-content="<span><b> Calories: 7</b></span><br><span style='color: #FCB524'> Carbs:2</span><br><span style='color: #52C0BC'> Protein:3</span><br><span style='color: #976fe8'> Fat:5</span>">
+                                                        @food.FoodName
+                                                    </span>
+                                                </div>
+                                                <div class="col-lg-5 col-lg-offset-2 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer text-right">
+
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
+                                    </div>
+                                </div>
+                            </div>
+                            mealExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!mealExists)
+                    {
+                        <div class="row">
+                            <div class="card">
+                                <h4 class="card-header"><span>Breakfast</span><br></h4>
+                                <div class="card-body">
+                                </div>
+                                <div class="card-footer text-right">
+
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 1})'">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    mealExists = false;
+                    foreach (var meal in Model.meals)
+                    {
+                        if (meal.MealType == 2)
+                        {
+                            <div class="row">
+                                <div class="card">
+                                    <h4 class="card-header"><span>Lunch</span></h4>
+                                    <br>
+                                    <span class="card-subheader">@meal.Cals Calories</span>
+                                    <div class="card-body">
+                                        @foreach (var food in meal.Foods)
+                                        {
+                                            <div class="row food">
+                                                <div class="col-lg-5 foodName">@Html.DisplayFor(model => food.FoodName)</div>
+                                                <div class="col-lg-5 col-lg-offset-2 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer text-right">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 2})'">
+                                    </div>
+                                </div>
+                            </div>
+                            mealExists = true;
+                            break;
+                        }
+
+                    }
+                    if (!mealExists)
+                    {
+                        <div class="row">
+                            <div class="card">
+                                <h4 class="card-header"><span>Lunch</span><br></h4>
+                                <div class="card-body">
+                                </div>
+                                <div class="card-footer text-right">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 2})'">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    mealExists = false;
+                    foreach (var meal in Model.meals)
+                    {
+                        if (meal.MealType == 3)
+                        {
+                            <div class="row">
+                                <div class="card">
+                                    <h4 class="card-header"><span>Dinner</span></h4>
+                                    <br>
+                                    <span class="card-subheader">@meal.Cals Calories</span>
+                                    <div class="card-body">
+                                        @foreach (var food in meal.Foods)
+                                        {
+                                            <div class="row food">
+                                                <div class="col-lg-5 foodName">@Html.DisplayFor(model => food.FoodName)</div>
+                                                <div class="col-lg-5 col-lg-offset-2 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer text-right">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 3})'">
+                                    </div>
+                                </div>
+                            </div>
+                            mealExists = true;
+                            break;
+                        }
+
+
+                    }
+                    if (!mealExists)
+                    {
+                        <div class="row">
+                            <div class="card">
+                                <h4 class="card-header"><span>Dinner</span><br></h4>
+                                <div class="card-body">
+                                </div>
+                                <div class="card-footer text-right">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 3})'">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    mealExists = false;
+                    foreach (var meal in Model.meals)
+                    {
+                        if (meal.MealType == 4)
+                        {
+                            <div class="row">
+                                <div class="card">
+                                    <h4 class="card-header"><span>Snack</span></h4>
+                                    <br>
+                                    <span class="card-subheader">@meal.Cals Calories</span>
+                                    <div class="card-body">
+                                        @foreach (var food in meal.Foods)
+                                        {
+                                            <div class="row food">
+                                                <div class="col-lg-5 foodName">@Html.DisplayFor(model => food.FoodName)</div>
+                                                <div class="col-lg-5 col-lg-offset-2 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer text-right">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 4})'">
+                                    </div>
+                                </div>
+                            </div>
+                            mealExists = true;
+                            break;
+                        }
+                    }
+                    if (!mealExists)
+                    {
+                        <div class="row">
+                            <div class="card">
+                                <h4 class="card-header"><span>Snack</span><br></h4>
+                                <div class="card-body">
+                                </div>
+                                <div class="card-footer text-right">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 4})'">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#datepicker").datepicker();
+    });
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Macro', 'Percent total'],
+            ['Carbs', @Model.totalMacC],
+            ['Protein', @Model.totalMacP],
+            ['Fat', @Model.totalMacF]
+        ]);
+
+        var options = {
+            chartArea: { width: '100%', height: '100%' },
+            colors: ['#FCB524', '#52C0BC', '#976fe8'],
+            legend: { position: 'none' },
+            pieSliceTextStyle: { fontSize: 16 },
+            backgroundColor: '#f9f9f9',
+            animation: {
+                startup: true,
+                duration: 1000
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
+
+        chart.draw(data, options);
+    }
+</script>

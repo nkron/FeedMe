@@ -1,0 +1,47 @@
+﻿@model FeedMe.Models.FoodViewModel
+
+@using (Html.BeginForm("SaveFood", "AddFood", FormMethod.Post))
+{
+    <h1>Create New Food</h1>
+    <div class="form-horizontal">
+        <h2>Food Details</h2>
+
+        @if (!string.IsNullOrEmpty(ViewBag.message))
+        {
+            <p>@ViewBag.message</p>
+        }
+        <div class="col">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="FoodName"></label>
+                    <input asp-for="FoodName" class="form-control" />
+                    <span asp-validation-for="FoodName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cals"></label>
+                    <input asp-for="Cals" class="form-control" />
+                    <span asp-validation-for="Cals" class="text-danger"></span>
+                </div>
+                <h2>Macro Details</h2>
+                <div class="row">
+                    <div class="form-group col col-xs-4">
+                        <label asp-for="MacC"></label>
+                        <input asp-for="MacC" class="form-control" />
+                        <span asp-validation-for="MacC" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col col-xs-4">
+                        <label asp-for="MacF"></label>
+                        <input asp-for="MacF" class="form-control" />
+                        <span asp-validation-for="MacF" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col col-xs-4">
+                        <label asp-for="MacP"></label>
+                        <input asp-for="MacP" class="form-control" />
+                        <span asp-validation-for="MacP" class="text-danger"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Food</button>
+            </form>
+        </div>
+    </div>
+}

@@ -44,7 +44,7 @@ namespace FeedMe.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("index", "MealPlanner");
                 }
                 AddErrors(result);
             }
@@ -76,7 +76,7 @@ namespace FeedMe.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("index", "MealPlanner");
                 }                
                 else
                 {
@@ -119,7 +119,7 @@ namespace FeedMe.Controllers
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                return RedirectToAction("index", "home");
+                return RedirectToAction("index", "MealPlanner");
             }
             else
             {

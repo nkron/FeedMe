@@ -29,37 +29,38 @@ namespace FeedMe.Models
         }
         public int MealID { get; set; }
 
-        [Display(Name = "Meal Name ")]
+        [Display(Name = "Meal Name")]
         public string MealName{ get; set; }
 
-        [Display(Name = "Carbs:")]
+        [Display(Name = "Carbs")]
         public int MacC { get; set; }
 
-        [Display(Name = "Protein:")]
+        [Display(Name = "Protein")]
         public int MacP { get; set; }
 
-        [Display(Name = "Fat:")]
+        [Display(Name = "Fat")]
         public int MacF { get; set; }
 
-        [Display(Name = "Calories:")]
+        [Display(Name = "Calories")]
         public int Cals { get; set; }
 
-        [Display(Name = "Date Created:")]
+        [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
+        public DateTime DateUsed { get; set; }
 
-        public MealType Type { get; set; }
+        public int MealType { get; set; }
         public List<FoodViewModel> Foods { get; set; }
 
         public void LoadData(Meal m)
         {
             //Put meal data in local vars
-            MealID = m.MealID;
+            MealID = m.MealID;            
             MealName = m.MealName;
             MacC = m.MacC;
             MacF = m.MacF;
             MacP = m.MacP;
-            DateCreated = m.DateCreated;
-            Type = m.MealTypeID;
+            DateUsed = m.DateUsed;
+            MealType = m.MealType;
             
             
             //Put each food in a foodviewmodel

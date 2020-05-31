@@ -28,41 +28,64 @@ namespace FeedMe.Repositories
             }
         }
 
-        public async void AddFoodToMeal(string date, string mealType, int foodID)
+        public void AddFoodToMeal(string date, int mealType, int foodID, int userID)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
 
                 var param = new DynamicParameters();
-                param.Add("@FoodName", searchName, DbType.String);
+                param.Add("@DateUsed", date, DbType.Date);
+                param.Add("@MealType", mealType, DbType.Int32);
+                param.Add("@FoodID", foodID, DbType.Int32);
+                param.Add("@UserID", userID, DbType.Int32);
 
-                if (searchType == 0)
-                    searchType = null;
-                param.Add("@FoodType", searchType, DbType.Int32);
-
-                await connection.OpenAsync();
-                var i = await connection.QueryAsync<Food>(
+                var i = connection.Execute(
                     "dbo.AddFoodToMeal",
                     param,
                     commandType: CommandType.StoredProcedure);
-
-                return i;
-
+                return;
             }
         }
 
-        public async Task<IEnumerable<Food>> Search(string searchName, MealType? searchType)
+        public void UpdateFood(string foodName, int cals, int? macC, int? macF, int? macP, int? foodID)
+        {
+            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                string procedureName = "dbo.CreateFood";
+
+                var param = new DynamicParameters();
+                param.Add("@FoodName", foodName, DbType.String);
+                param.Add("@Cals", cals, DbType.Int32);
+                param.Add("@MacC", macC, DbType.Int32);
+                param.Add("@MacP", macP, DbType.Int32);
+                param.Add("@MacF", macF, DbType.Int32);
+                if (foodID != null)
+                {
+                    param.Add("@FoodID", foodID, DbType.Int32);
+                    procedureName = "dbo.UpdateFood";
+                }
+
+                var i = connection.Execute(
+                    procedureName,
+                    param,
+                    commandType: CommandType.StoredProcedure);
+                return;
+            }
+        }
+
+        public async Task<IEnumerable<Food>> Search(string searchName, MealType? searchType, int CalsMin, int CalsMax)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
                 
                 var param = new DynamicParameters();
-                param.Add("@FoodName", searchName, DbType.String);
+                param.Add("@FoodName", "%" + searchName + "%", DbType.String);
 
                 if (searchType == 0)
                     searchType = null;
                 param.Add("@FoodType", searchType, DbType.Int32);
-
+                param.Add("@CalsMin", CalsMin, DbType.Int32);
+                param.Add("@CalsMax", CalsMax, DbType.Int32);
                 await connection.OpenAsync();
                 var i =  await connection.QueryAsync<Food>(
                     "dbo.SearchFood",

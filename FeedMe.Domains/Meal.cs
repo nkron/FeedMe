@@ -13,7 +13,8 @@ namespace FeedMe.Domains
     {
         [Column("MealID")]
         public int MealID { get; set; }
-
+        [Column("UserID")]
+        public int UserID { get; set; }
         [Column("MealName")]
         public string MealName { get; set; }
 
@@ -31,8 +32,10 @@ namespace FeedMe.Domains
 
         [Column("DateCreated")]
         public DateTime DateCreated { get; set; }
+        [Column("DateCreated")]
+        public DateTime DateUsed { get; set; }
 
-        [Column("MealTypeID")]
-        public MealType MealTypeID { get; set; }
+        [Column("MealType")]
+        public int MealType { get; set; }
     }
 }

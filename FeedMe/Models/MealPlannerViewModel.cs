@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations;
 using FeedMe.Services;
 using FeedMe.Domains;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace FeedMe.Models
 {
-    public class MealDayViewModel
+    public class MealPlannerViewModel
     {
         MealService _mealService;
         MealService _foodService;
 
         //The date on the page - used to get meals for this day
-        [Display(Name = "Date:")]
+        [Display(Name = "Date")]
         public int totalCals { get; set; }
 
         public int totalMacC { get; set; }
@@ -26,14 +27,17 @@ namespace FeedMe.Models
         public int targetMacPTotal { get; set; }
         public int targetMacFTotal { get; set; }
         public String Date{get; set;}
-
+        public String Month { get; set; }
+        public String Year { get; set; }
+        public String Day { get; set; }
+        public String DayWord { get; set; }
         public List<MealDetailsViewModel> meals { get; set; }
 
-        public MealDayViewModel()
+        public MealPlannerViewModel()
         {
 
         }
-        public MealDayViewModel(MealService mealService, FoodService _foodService, User user, DateTime d)
+        public MealPlannerViewModel(MealService mealService, FoodService _foodService, User user, DateTime d)
         {
             _mealService = mealService;
             
@@ -59,6 +63,11 @@ namespace FeedMe.Models
             targetMacPTotal = Convert.ToInt32(targetCals * (targetMacP*.01));
 
             Date = d.ToShortDateString();
+
+            Month = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(d.Month);
+            Year = d.Year.ToString();
+            Day = d.Day.ToString();
+            DayWord = d.DayOfWeek.ToString();
         }
     }
 }
