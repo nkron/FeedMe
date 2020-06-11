@@ -1,5 +1,50 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
-for details on configuring this project to bundle and minify static web assets. */
+﻿.card-header {
+    padding: .75rem 0 .2rem 1.25rem;
+    margin-bottom: 0;
+    background-color: white;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Avenir, "Lato", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.card-subheader {
+    padding-left: 1.25rem;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.card-footer:last-child {
+    border-radius: 0 0 calc(.25rem - 1px) calc(.25rem - 1px);
+}
+
+.card-footer {
+    padding: 0 1rem .50rem 1rem;
+    background-color: white;
+    border-top: 0 white;
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem 0;
+}
+
+.card {
+    margin-top: 10px;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    box-shadow: 1px 1px 2px 1px grey;
+}
+
 html {
     background-color: #f9f9f9;
 }
@@ -15,6 +60,9 @@ container-fluid {
 .home {
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+.hidden{
+    visibility:hidden;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */

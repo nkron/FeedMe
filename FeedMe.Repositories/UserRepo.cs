@@ -27,15 +27,15 @@ namespace FeedMe.Repositories
             }
         }
 
-        public User GetByID(int ID)
-        {
+        //public User GetByID(int ID)
+        //{
 
-            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
-            {
-                User output = connection.Query<User>("dbo.GetUser @UserID", new { UserID = ID }).First();
-                return output;
-            }
-        }
+        //    using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+        //    {
+        //        User output = connection.Query<User>("dbo.GetUser @UserID", new { UserID = ID }).First();
+        //        return output;
+        //    }
+        //}
         public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.UserID.ToString());

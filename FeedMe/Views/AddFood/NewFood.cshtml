@@ -1,6 +1,6 @@
 ﻿@model FeedMe.Models.FoodViewModel
 
-@using (Html.BeginForm("SaveFood", "AddFood", FormMethod.Post))
+@using (Html.BeginForm("CreateFood", "AddFood", FormMethod.Post))
 {
     <h1>Create New Food</h1>
     <div class="form-horizontal">
@@ -18,23 +18,29 @@
                     <span asp-validation-for="FoodName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Cals"></label>
-                    <input asp-for="Cals" class="form-control" />
-                    <span asp-validation-for="Cals" class="text-danger"></span>
+                    <label asp-for="FoodDesc"></label>
+                    <input asp-for="FoodDesc" class="form-control" />
+                    <span asp-validation-for="FoodDesc" class="text-danger"></span>
                 </div>
-                <h2>Macro Details</h2>
+
+                <h2>Serving Details</h2>
                 <div class="row">
-                    <div class="form-group col col-xs-4">
+                    <div class="form-group col">
+                        <label asp-for="Cals"></label>
+                        <input asp-for="Cals" class="form-control" />
+                        <span asp-validation-for="Cals" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col">
                         <label asp-for="MacC"></label>
                         <input asp-for="MacC" class="form-control" />
                         <span asp-validation-for="MacC" class="text-danger"></span>
                     </div>
-                    <div class="form-group col col-xs-4">
+                    <div class="form-group col">
                         <label asp-for="MacF"></label>
                         <input asp-for="MacF" class="form-control" />
                         <span asp-validation-for="MacF" class="text-danger"></span>
                     </div>
-                    <div class="form-group col col-xs-4">
+                    <div class="form-group col">
                         <label asp-for="MacP"></label>
                         <input asp-for="MacP" class="form-control" />
                         <span asp-validation-for="MacP" class="text-danger"></span>

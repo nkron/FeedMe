@@ -47,7 +47,29 @@ namespace FeedMe.Repositories
             }
         }
 
-        public void UpdateFood(string foodName, int cals, int? macC, int? macF, int? macP, int? foodID)
+        public void UpdateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int foodID)
+        {
+            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                string procedureName = "dbo.UpdateFood";
+
+                var param = new DynamicParameters();
+                param.Add("@FoodName", foodName, DbType.String);
+                param.Add("@foodDesc", foodDesc, DbType.String);
+                param.Add("@Cals", cals, DbType.Int32);
+                param.Add("@MacC", macC, DbType.Int32);
+                param.Add("@MacP", macP, DbType.Int32);
+                param.Add("@MacF", macF, DbType.Int32);
+                param.Add("@FoodID", foodID, DbType.Int32);            
+
+                var i = connection.Execute(
+                    procedureName,
+                    param,
+                    commandType: CommandType.StoredProcedure);
+                return;
+            }
+        }
+        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -55,21 +77,17 @@ namespace FeedMe.Repositories
 
                 var param = new DynamicParameters();
                 param.Add("@FoodName", foodName, DbType.String);
+                param.Add("@foodDesc", foodDesc, DbType.String);
                 param.Add("@Cals", cals, DbType.Int32);
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);
                 param.Add("@MacF", macF, DbType.Int32);
-                if (foodID != null)
-                {
-                    param.Add("@FoodID", foodID, DbType.Int32);
-                    procedureName = "dbo.UpdateFood";
-                }
-
-                var i = connection.Execute(
+                param.Add("@creatorID", creatorID, DbType.Int32);
+                 
+                return connection.Query<int>(
                     procedureName,
                     param,
-                    commandType: CommandType.StoredProcedure);
-                return;
+                    commandType: CommandType.StoredProcedure).First();               
             }
         }
 

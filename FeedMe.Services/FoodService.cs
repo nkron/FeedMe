@@ -35,9 +35,13 @@ namespace FeedMe.Services
             return;
         }
 
-        public void UpdateFood(string foodName, int cals, int? macC, int? macF, int? macP, int? foodID)
+        public void UpdateFood(string foodName, string foodDesc,int cals, int? macC, int? macF, int? macP, int foodID)
         {
-            _FoodRepo.UpdateFood(foodName, cals, macC, macF, macP, foodID);
+            _FoodRepo.UpdateFood(foodName,foodDesc, cals, macC, macF, macP, foodID);
+        }
+        public void CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
+        {
+            _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID);
         }
     }
 }

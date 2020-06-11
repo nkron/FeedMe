@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using FeedMe.Domains;
 using FeedMe.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FeedMe.Models
@@ -12,10 +13,12 @@ namespace FeedMe.Models
     {
         private readonly FoodService _FoodService;
         private readonly IngService _IngService;
-        public FoodViewModel(FoodService foodService, IngService ingService)
+        private readonly UserManager<User> _userManager;
+        public FoodViewModel(FoodService foodService, IngService ingService, UserManager<User> userManager)
         {
             _FoodService = foodService;
             _IngService = ingService;
+            _userManager = userManager;
         }
 
         public FoodViewModel(Food food)
@@ -32,40 +35,36 @@ namespace FeedMe.Models
         [Required]
         [Display(Name = "Food Name ")]
         public string FoodName{ get; set; }
+        [Required]
+        [Display(Name = "Food Description ")]
+        public string FoodDesc { get; set; }
 
         [Display(Name = "Carbs(g)")]
+        [Range(0,10000)]
         public int? MacC { get; set; }
 
         [Display(Name = "Protein(g)")]
+        [Range(0, 10000)]
         public int? MacP { get; set; }
 
         [Display(Name = "Fat(g)")]
+        [Range(0, 10000)]
         public int? MacF { get; set; }
         [Required]
         [Display(Name = "Calories")]
+        [Range(0, 10000)]
         public int Cals { get; set; }
 
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
-
+        
+        [Display(Name = "created by ")]
+        public string CreatorUsername { get; set; }
+        public int CreatorID { get; set; }
         public int FoodType { get; set; }
 
         public IEnumerable<Ingredient> Ingredients { get; set; }
 
-        public string Tooltip
-        {
-            get
-            {
-                string s = (
-                    "<span><b> Calories: " + Cals + "</b></span><br>" +
-                    "<span style='color: #FCB524'> Carbs:" + MacC + "</span><br>" +
-                    "<span style='color: #52C0BC'> Protein:" + MacP + "</span><br>" +
-                    "<span style='color: #976fe8'> Fat:" + MacF + "</span>"
-
-                );
-                return s;
-            }
-        }
         public void LoadData(Food f)
         {
             //Load food data into local vars
@@ -76,10 +75,10 @@ namespace FeedMe.Models
             MacP = f.MacP;
             Cals = f.Cals;
             DateCreated = f.DateCreated;
-            //Food slot?
-            //Put ingredients into ingredientviewmodels
-            //Ingredients = _IngService.getFoodIngs(FoodID);
-
+            CreatorID = f.CreatorID;
+            //todo:add username
+            //CreatorUsername = _userManager.FindByIdAsync(f.CreatorID.ToString()).Result.Username;
+                         
         }       
     }
 

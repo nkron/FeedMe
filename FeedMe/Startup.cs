@@ -43,7 +43,6 @@ namespace FeedMe
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddTransient<UserRepo>();
-            services.AddTransient<UserService>();
             services.AddTransient<MealService>();
             services.AddTransient<MealRepo>();
             services.AddTransient<FoodRepo>();

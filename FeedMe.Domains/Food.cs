@@ -15,6 +15,8 @@ namespace FeedMe.Domains
 
         [Column("FoodName")]
         public string FoodName { get; set; }
+        [Column("FoodDesc")]
+        public string FoodDesc { get; set; }
 
         [Column("MacC")]
         public int MacC { get; set; }
@@ -30,5 +32,8 @@ namespace FeedMe.Domains
 
         [Column("DateCreated")]
         public DateTime DateCreated { get; set; }
+
+        [Column("CreatorID")]
+        public int CreatorID { get; set; }
     }
 }

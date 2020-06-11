@@ -16,7 +16,6 @@ namespace FeedMe.Controllers
     public class UserProfileController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly UserService _userService;
 
         public async Task<IActionResult> Index()
         {            
@@ -26,10 +25,9 @@ namespace FeedMe.Controllers
             return View(model);
         }
 
-        public UserProfileController(UserService userService, UserManager<User> userManager)
+        public UserProfileController(UserManager<User> userManager)
         {
             _userManager = userManager;
-            _userService = userService;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -42,12 +40,12 @@ namespace FeedMe.Controllers
         {
             if (ModelState.IsValid) {
                 try { 
-                await _userService.UpdateAsync(new User { FirstName = model.FirstName, LastName = model.LastName, TargetCals=model.TargetCals,
+                await _userManager.UpdateAsync(new User { FirstName = model.FirstName, LastName = model.LastName, TargetCals=model.TargetCals,
                 TargetMacC =model.TargetMacC,TargetMacF=model.TargetMacF,TargetMacP=model.TargetMacP, UserID= Convert.ToInt32(_userManager.GetUserId(User))});
                 }
                 catch(Exception e)
                 {
-
+                    throw new Exception(e.ToString());
                 }
                 ViewBag.Success = "Profile successfully updated!";
             }
