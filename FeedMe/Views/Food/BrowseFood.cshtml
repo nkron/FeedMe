@@ -1,7 +1,7 @@
 ﻿@model FeedMe.Models.FoodSearchViewModel
 @using FeedMe.Domains.Enumerations
 
-@using (Html.BeginForm("Search", "AddFood", FormMethod.Get))
+@using (Html.BeginForm("Search", "Food", FormMethod.Get))
 {
     <h1>Add Food to @Model.Date</h1>
     <div class="form-horizontal">
@@ -27,7 +27,7 @@
                             @item.Cals
                         </td>
                         <td>
-                            @Html.ActionLink("AddFood", "AddToMeal", "AddFood", new { foodID = item.FoodID }, null)
+                            @Html.ActionLink("Food", "AddToMeal", "Food", new { foodID = item.FoodID }, null)
                         </td>
                     </tr>
                 }

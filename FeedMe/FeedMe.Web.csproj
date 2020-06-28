@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\Moment\" />
+    <Folder Include="wwwroot\lib\Slider\" />
   </ItemGroup>
 
 </Project>

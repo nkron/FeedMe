@@ -19,16 +19,27 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
-        public IEnumerable<Food> GetMealFoods(int mealID)
+        public List<KeyValuePair<Food, int>> GetMealFoods(int mealID)
         {
+            //Returns Food and Serving amount as KVP. Recording servings in Food Domain breaks with the DB model.
+
+            List<KeyValuePair<Food,int>> list = new List<KeyValuePair<Food,int>>();
+            List<int> servings;
+            List<Food> foods;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
-                var output = connection.Query<Food>("dbo.GetFoods @MealID ", new { MealID = mealID });
-                return output;
+                foods = (List<Food>)connection.Query<Food>("dbo.GetFoods @MealID ", new { MealID = mealID });
+                
+                servings = (List<int>)connection.Query<int>("dbo.GetFoodServings @MealID ", new { MealID = mealID });
             }
+            for (int i = 0;i<foods.Count;i++)
+            {
+                list.Add(new KeyValuePair<Food, int>(foods[i],servings[i]));
+            }
+            return list;
         }
 
-        public void AddFoodToMeal(string date, int mealType, int foodID, int userID)
+        public void AddFoodToNewMeal(string date, int mealType, int foodID, int userID)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -40,12 +51,44 @@ namespace FeedMe.Repositories
                 param.Add("@UserID", userID, DbType.Int32);
 
                 var i = connection.Execute(
-                    "dbo.AddFoodToMeal",
+                    "dbo.AddFoodToNewMeal",
                     param,
                     commandType: CommandType.StoredProcedure);
                 return;
             }
         }
+        public void AddFoodToExistingMeal(int foodID, int mealID)
+        {
+            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+
+                var param = new DynamicParameters();
+                param.Add("@MealID", mealID, DbType.Int32);
+                param.Add("@FoodID", foodID, DbType.Int32);
+
+                var i = connection.Execute(
+                    "dbo.AddFoodToExistingMeal",
+                    param,
+                    commandType: CommandType.StoredProcedure);
+                return;
+            }
+        }
+        public void RemoveFoodFromMeal(int mealID, int foodID)
+        {
+            using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+
+                var param = new DynamicParameters();
+                param.Add("@FoodID", foodID, DbType.Int32);
+                param.Add("@MealID", mealID, DbType.Int32);
+                var i = connection.Execute(
+                    "dbo.DeleteFoodFromMeal",
+                    param,
+                    commandType: CommandType.StoredProcedure);
+                return;
+            }
+        }
+
 
         public void UpdateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int foodID)
         {
@@ -55,7 +98,7 @@ namespace FeedMe.Repositories
 
                 var param = new DynamicParameters();
                 param.Add("@FoodName", foodName, DbType.String);
-                param.Add("@foodDesc", foodDesc, DbType.String);
+                param.Add("@fFoodDesc", foodDesc, DbType.String);
                 param.Add("@Cals", cals, DbType.Int32);
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);
@@ -77,7 +120,7 @@ namespace FeedMe.Repositories
 
                 var param = new DynamicParameters();
                 param.Add("@FoodName", foodName, DbType.String);
-                param.Add("@foodDesc", foodDesc, DbType.String);
+                param.Add("@FoodDesc", foodDesc, DbType.String);
                 param.Add("@Cals", cals, DbType.Int32);
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);

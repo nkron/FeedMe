@@ -1,0 +1,239 @@
+﻿@model FeedMe.Models.FoodDetailsViewModel
+@using (Html.BeginForm("SubmitFood", "Food", FormMethod.Post))
+
+{
+    <div class="form">
+        <div class="form-horizontal">
+            <div class="card col-lg-offset-4 col-lg-4" style="padding: 5px 30px;">
+                <row>
+                    <div class="pull-right" style="padding-top:20px;">
+                        <button type="button" id="Customize" class="button green hidden" onclick="createMode()"><i class="fas fa-edit">Customize</i></button>
+                        <button type="button" id="Edit" class="button green hidden" onclick="editMode()"><i class="fas fa-edit">Edit</i></button>
+                    </div>
+                    <h2 class="card-header">Food Details</h2>
+
+                </row>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label asp-for="FoodName"></label>
+                                <input asp-for="FoodName" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-10">
+                                <label asp-for="FoodDesc"></label>
+                                <input asp-for="FoodDesc" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <h2 class="card-header">Serving Details</h2>
+                        <div class="row">
+                            <div class="form-group col-lg-2">
+                                <label asp-for="Cals"></label>
+                                <input asp-for="Cals" id="Cals" min="0" inputmode="numeric" type="number" class="form-control" onchange="checkCalories();" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5">
+                                <div id="MacroSlider"></div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:15px;">
+
+                            <div class="col-lg-2 col-md-1 form-group">
+                                <label asp-for="MacC" class="MacC"></label>
+                                <input asp-for="MacC" id="MacC" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders();checkCalories();" />
+                            </div>
+                            <div class="col-lg-2 col-md-1 form-group">
+                                <label asp-for="MacP" class="MacP"></label>
+                                <input asp-for="MacP" id="MacP" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders(); checkCalories();" />
+                            </div>
+                            <div class="col-lg-2 col-md-1 form-group">
+                                <label asp-for="MacF" class="MacF"></label>
+                                <input asp-for="MacF" id="MacF" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders(); checkCalories();" />
+                            </div>
+                        </div>
+                        <div class="col-lg-12 alert alert-danger centered hidden" id="CalWarning">
+                            <div class="row">
+                                The calories entered <b id="EnteredCals"></b> differ too much from the calories calculated from the macros <b id="CalculatedCals"></b>.
+                            </div>
+                            <div class="row">
+                                <button class="button green" onclick="AdjustCals()"><span id="CalsButton"></span></button>
+                                <button class="button green" onclick="AdjustMacros()"><span id="MacroButton"></span></button>
+                                <button class="button" onclick="IgnoreWarning()">Ignore Warning</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="row pull-right">
+                                <button id="Create" class="submit button blue hidden" value="Save">Save</button>
+                                <button id="Save" class="submit button blue hidden" value="Update">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    <input type="hidden" id="mode" value="@ViewBag.Mode" />
+    <input type="hidden" id="foodUserID" value="@Model.CreatorID.ToString()" />
+    <input type="hidden" id="currentUserID" value="@ViewBag.UserID" />
+    <input type="hidden" id="sliderNum1" value="@Model.SliderNum1)" />
+    <input type="hidden" id="sliderNum2" value="@Model.SliderNum2" />
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/lib/Slider/nouislider.js"></script>
+    <script src="~/lib/Slider/wNumb.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var mode = document.getElementById("mode").value;
+            if (mode == "edit") {
+                editMode()
+            }
+            else {
+                if (document.getElementById("foodUserID").value == document.getElementById("currentUserID").value) {
+                    $("#Edit").removeClass("hidden");
+                }
+                else {
+                    $("#Customize").removeClass("hidden");
+                }
+            }
+        });
+        //Macro Slider
+        noUiSlider.create(MacroSlider, {
+            start: [33, 66],
+            connect: [true, true, true],
+            step: 1,
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            format: wNumb({
+                decimals: 0
+            })
+        });
+        //Set disabled colors
+        var connect = MacroSlider.querySelectorAll('.noUi-connect');
+        var classes = ['disabledSlider', 'disabledSlider', 'disabledSlider'];
+
+        for (var i = 0; i < connect.length; i++) {
+            connect[i].classList.add(classes[i]);
+        }
+
+        MacroSlider.noUiSlider.on('update', function (values, handle) {
+            //Calculate Percentages
+            var MacC = values[0];
+            var MacF = 100 - values[1];
+            var MacP = Number(100) - (Number(MacC) + Number(MacF));
+            //Calculate grams
+            var cals = document.getElementById("Cals").value;
+            var MacCg = Math.trunc(((MacC * .01) * cals) / 4);
+            var MacPg = Math.trunc(((MacP * .01) * cals) / 4);
+            var MacFg = Math.trunc(((MacF * .01) * cals) / 7);
+
+            $("#MacC").val(MacCg);
+            $("#MacP").val(MacPg);
+            $("#MacF").val(MacFg);
+
+            checkCalories();
+        });
+
+        function setSliders() {
+
+            var cals = document.getElementById("Cals").value;
+            var MacCg = Math.round((($("#MacC").val() / .01) / cals) * 4);
+            var MacPg = Math.round((($("#MacP").val() / .01) / cals) * 4);
+            var MacFg = Math.round((($("#MacF").val() / .01) / cals) * 7);
+
+            MacroSlider.noUiSlider.set([MacCg, 100 - Number(MacFg)]);
+
+        }
+
+        function editMode() {
+            $("#Save").removeClass("hidden");
+            $("#Customize").addClass("hidden");
+            $("#Edit").addClass("hidden");
+            $(".form-control").prop("disabled", false);
+            enableSlider();
+        }
+        function createMode() {
+            $("#Create").removeClass("hidden");
+            $("#Customize").addClass("hidden");
+            $("#Edit").addClass("hidden");
+            $(".form-control").prop("disabled", false);
+            enableSlider();
+        }
+        function enableSlider() {
+            var connect = MacroSlider.querySelectorAll('.noUi-connect');
+            var classes = ['MacCBackground', 'MacPBackground', 'MacFBackground'];
+
+            for (var i = 0; i < connect.length; i++) {
+                connect[i].classList.add(classes[i]);
+            }
+        }
+        function createFood() {
+            //$.ajax({
+            //    type: "POST",
+            //    url: '/Food/Save',
+            //    data: $('Form').serialize(),   //your form name.it takes all the values of model
+            //    dataType: 'json',
+            //    success: function (result) {
+            //        console.log(result);
+            //    }
+            //})
+        }
+        function saveFood() {
+            //$.ajax({
+            //    type: "POST",
+            //    url: '/Food/Save',
+            //    data: $('Form').serialize(),   //your form name.it takes all the values of model
+            //    dataType: 'json',
+            //    success: function (result) {
+            //        console.log(result);
+            //    }
+            //})
+        }
+
+        var actualCals;
+        var actualMacCP;
+        var actualMacF;
+        function checkCalories() {
+            var cals = document.getElementById("Cals").value;
+            var upperCals = cals * 1.2;
+            var lowerCals = cals * 0.8;
+            actualCals = Math.trunc(calcCals());
+            actualMacCP = Math.trunc((cals / 3) / 4);
+            actualMacF = Math.trunc((cals / 3) / 9);
+
+            if (actualCals < lowerCals || actualCals > upperCals) {
+                document.getElementById("EnteredCals").textContent = "(" + cals + ")";
+                document.getElementById("CalculatedCals").textContent = "(" + actualCals + ")";
+                document.getElementById("CalsButton").textContent = "Set calories to " + actualCals;
+                document.getElementById("MacroButton").textContent = ("Set macros to " + actualMacCP + "g | " + actualMacCP + "g | " + actualMacF + "g");
+                $("#CalWarning").removeClass("hidden");
+            }
+            else {
+                $("#CalWarning").addClass("hidden");
+            }
+        }
+        function AdjustCals() {
+            document.getElementById("Cals").value = actualCals;
+            $("#CalWarning").addClass("hidden");
+        }
+        function AdjustMacros() {
+            document.getElementById("MacC").value = actualMacCP;
+            document.getElementById("MacF").value = actualMacF;
+            document.getElementById("MacP").value = actualMacCP;
+            $("#CalWarning").addClass("hidden");
+        }
+        function IgnoreWarning() {
+            $("#CalWarning").addClass("hiddenForever");
+        }
+        function calcCals() {
+            var macC = document.getElementById("MacC").value;
+            var macP = document.getElementById("MacP").value;
+            var macF = document.getElementById("MacF").value;
+            return (macC * 4) + (macF * 9) + (macP * 4);
+        }
+    </script>

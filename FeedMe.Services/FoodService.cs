@@ -19,7 +19,7 @@ namespace FeedMe.Services
         {
             return _FoodRepo.GetByFoodID(FoodID);
         }
-        public IEnumerable<Food> getMealFoods(int MealID)
+        public List<KeyValuePair<Food, int>> GetMealFoods(int MealID)
         {
             return _FoodRepo.GetMealFoods(MealID);
         }
@@ -29,19 +29,28 @@ namespace FeedMe.Services
             return await _FoodRepo.Search(searchName, searchType, calsMin, calsMax);
         }
 
-        public void AddFoodToMeal(string date, int mealType, int foodID, int userID)
+        public void AddFoodToExistingMeal(int foodID, int mealID)
         {
-            _FoodRepo.AddFoodToMeal(date, mealType, foodID, userID);
+            _FoodRepo.AddFoodToExistingMeal(foodID,mealID);
             return;
         }
-
+        public void AddFoodToNewMeal(string date, int mealType, int foodID, int userID)
+        {
+            _FoodRepo.AddFoodToNewMeal(date, mealType, foodID, userID);
+            return;
+        }
+        public void RemoveFoodFromMeal(int mealID, int foodID)
+        {
+            _FoodRepo.RemoveFoodFromMeal(mealID, foodID);
+            return;
+        }
         public void UpdateFood(string foodName, string foodDesc,int cals, int? macC, int? macF, int? macP, int foodID)
         {
             _FoodRepo.UpdateFood(foodName,foodDesc, cals, macC, macF, macP, foodID);
         }
-        public void CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
+        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
         {
-            _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID);
+            return _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID);
         }
     }
 }

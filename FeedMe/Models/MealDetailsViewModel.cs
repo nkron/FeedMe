@@ -30,7 +30,7 @@ namespace FeedMe.Models
         public int MealID { get; set; }
 
         [Display(Name = "Meal Name")]
-        public string MealName{ get; set; }
+        public string MealName { get; set; }
 
         [Display(Name = "Carbs")]
         public int MacC { get; set; }
@@ -54,27 +54,37 @@ namespace FeedMe.Models
         public void LoadData(Meal m)
         {
             //Put meal data in local vars
-            MealID = m.MealID;            
+            MealID = m.MealID;
             MealName = m.MealName;
             MacC = m.MacC;
             MacF = m.MacF;
             MacP = m.MacP;
             DateUsed = m.DateUsed;
             MealType = m.MealType;
-            
-            
+
+
             //Put each food in a foodviewmodel
-            var f = _FoodService.getMealFoods(m.MealID);
+            List<KeyValuePair<Food, int>> list = _FoodService.GetMealFoods(m.MealID);
+
             Foods = new List<FoodViewModel>();
-            foreach (Food i in f){
-                Cals += i.Cals;
-                MacF += i.MacF;
-                MacP += i.MacP;
-                MacC += i.MacC;
-                Foods.Add(new FoodViewModel(i));                
-            }                         
+            foreach (KeyValuePair<Food, int> kvp in list)
+            {
+
+                Food f = kvp.Key;
+                int s = kvp.Value;
+
+                Cals += f.Cals*s;
+                MacF += f.MacF*s;
+                MacP += f.MacP*s;
+                MacC += f.MacC*s;
+
+                FoodViewModel fvm = new FoodViewModel(f);
+                fvm.Servings = s;
+
+                Foods.Add(fvm);
+            }
         }
     }
 
-    
+
 }

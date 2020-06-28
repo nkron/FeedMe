@@ -63,7 +63,7 @@ namespace FeedMe.Controllers
             model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }
-        public async Task<IActionResult> DeleteMealFood(MealPlannerViewModel model, int mealID)
+        public async Task<IActionResult> RemoveMeal(MealPlannerViewModel model, int mealID)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -73,7 +73,15 @@ namespace FeedMe.Controllers
             model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }
+        public async Task<IActionResult> RemoveFoodFromMeal(string date, int mealID, int foodID)
+        {
+            var user = await _userManager.GetUserAsync(User);
 
+            DateTime dt = Convert.ToDateTime(date);
+            _foodService.RemoveFoodFromMeal(mealID,foodID);
+            MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
+            return View("Index", model);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

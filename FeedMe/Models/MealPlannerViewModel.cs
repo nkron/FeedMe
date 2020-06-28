@@ -12,10 +12,7 @@ namespace FeedMe.Models
         MealService _mealService;
         MealService _foodService;
 
-        //The date on the page - used to get meals for this day
-        [Display(Name = "Date")]
         public int totalCals { get; set; }
-
         public int totalMacC { get; set; }
         public int totalMacF { get; set; }
         public int totalMacP { get; set; }
@@ -40,8 +37,9 @@ namespace FeedMe.Models
         public MealPlannerViewModel(MealService mealService, FoodService _foodService, User user, DateTime d)
         {
             _mealService = mealService;
-            
+
             //Put each meal in a mealviewmodel
+
             var m = _mealService.getUserMealsByDate(user.UserID,d);
             meals = new List<MealDetailsViewModel>();
             foreach (Meal i in m)

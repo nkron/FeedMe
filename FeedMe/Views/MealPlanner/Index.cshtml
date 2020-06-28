@@ -3,8 +3,43 @@
 @{
     <head>
         <link rel="stylesheet" href="~/css/planner.css" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Macro', 'Percent total'],
+            ['Carbs', @Model.totalMacC],
+            ['Protein', @Model.totalMacP],
+            ['Fat', @Model.totalMacF]
+        ]);
+
+        var options = {
+            chartArea: { width: '100%', height: '100%' },
+            colors: ['#FCB524', '#52C0BC', '#976fe8'],
+            legend: { position: 'none' },
+            pieSliceTextStyle: { fontSize: 16 },
+            backgroundColor: '#f9f9f9',
+            animation: {
+                startup: true,
+                duration: 1000
+            }
+        };
+        $(document).ready(function () {
+            $('#body').css("opacity", 1);
+        });
+
+        var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
+
+        chart.draw(data, options);
+    }
+        </script>
     </head>
-    <div class="row">
+    <noscript><h1>Please enable javascript to continue.</h1></noscript>
+
+    <div class="row" id="body" style="opacity:0">
         <div class="row PlannerHeaderRow">
             <div class="PlannerHeader"><span class="feedMePrimary">Meal Planner</span>&nbsp&nbsp<span>@Model.Month @Model.Year</span></div>
             <div class="row">
@@ -20,16 +55,17 @@
                     </button>
                     <button class="button btn-date" onclick="location.href='@Url.Action("NextDay", "MealPlanner", Model)'">
                         <i class="fas fa-chevron-right"></i>
-                    </button>                    
+                    </button>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-lg-push-7 col-md-push-7 col-lg-offset-1 col-md-offset-1 content" style="font-family: Avenir, Helvetica, Arial, sans-serif;">
             @{ if (Model.meals.Count != 0)
                 {
-            <div class="row text-center"><h6>Macros by Percentage:</h6></div>
+                    <div class="row text-center"><h6>Macros by Percentage:</h6></div>
                 }
-             }            
+            }
+
             <div class="row" style="padding-bottom:2em;">
                 <div id="chartContainer"></div>
             </div>
@@ -93,26 +129,39 @@
                                     <div class="card-body">
                                         @foreach (var food in meal.Foods)
                                         {
-                                        <div class="row food">
-                                            <div class="col-lg-5 foodName">
-                                                <a asp-controller="AddFood" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
-                                                    @Html.DisplayFor(model => food.FoodName)
-                                                </a>
+                                            <div class="row food">
+                                                <div class="col-lg-5 foodName">
+                                                    <div class="row">
+                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date >
+                                                            @Html.DisplayFor(model => food.FoodName)
+                                                        </a>
+                                                    </div>
+                                                    <div class="row foodServing">
+
+                                                        @Html.DisplayFor(model => food.Servings)
+
+                                                        @if (food.Servings == 1)
+                                                        {
+                                                            <span> serving</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>servings</span>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                                <div class="col-lg-1 foodDetails">
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                        <i class="fas fa-minus-circle minus"></i>
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-5 col-lg-offset-1 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
-                                            <div class="col-lg-1 foodDetails">
-                                                <a asp-controller="MealPlanner" asp-action="RemoveFood" asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
-                                                    <i class="fas fa-minus-circle minus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <button class="button green" style="border-radius: 25%;" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 1})'">
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +179,7 @@
                                 </div>
                                 <div class="card-footer text-right">
 
-                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 1})'">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new { @MealID = 0, @Date = Model.Date, @MealType = 1})'">
                                 </div>
                             </div>
                         </div>
@@ -151,13 +200,29 @@
                                         {
                                             <div class="row food">
                                                 <div class="col-lg-5 foodName">
-                                                    <a asp-controller="AddFood" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
-                                                        @Html.DisplayFor(model => food.FoodName)
-                                                    </a>
+                                                    <div class="row">
+                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                            @Html.DisplayFor(model => food.FoodName)
+                                                        </a>
+                                                    </div>
+                                                    <div class="row foodServing">
+
+                                                        @Html.DisplayFor(model => food.Servings)
+
+                                                        @if (food.Servings == 1)
+                                                        {
+                                                            <span> serving</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>servings</span>
+                                                        }
+
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-5 col-lg-offset-1 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                                <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                                 <div class="col-lg-1 foodDetails">
-                                                    <a asp-controller="MealPlanner" asp-action="RemoveFood" asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
                                                         <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
@@ -165,7 +230,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 2})'">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 2})'">
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +247,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 2})'">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new {@MealID = 0, @Date = Model.Date, @MealType = 2})'">
                                 </div>
                             </div>
                         </div>
@@ -203,13 +268,29 @@
                                         {
                                             <div class="row food">
                                                 <div class="col-lg-5 foodName">
-                                                    <a asp-controller="AddFood" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
-                                                        @Html.DisplayFor(model => food.FoodName)
-                                                    </a>
+                                                    <div class="row">
+                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                            @Html.DisplayFor(model => food.FoodName)
+                                                        </a>
+                                                    </div>
+                                                    <div class="row foodServing">
+
+                                                        @Html.DisplayFor(model => food.Servings)
+
+                                                        @if (food.Servings == 1)
+                                                        {
+                                                            <span> serving</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>servings</span>
+                                                        }
+
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-5 col-lg-offset-1 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                                <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                                 <div class="col-lg-1 foodDetails">
-                                                    <a asp-controller="MealPlanner" asp-action="RemoveFood" asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
                                                         <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
@@ -217,7 +298,7 @@
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 3})'">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 3})'">
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +316,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 3})'">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new {@MealID = 0, @Date = Model.Date, @MealType = 3})'">
                                 </div>
                             </div>
                         </div>
@@ -252,27 +333,42 @@
                                     <br>
                                     <span class="card-subheader">@meal.Cals Calories</span>
                                     <div class="card-body">
-                                        
+
                                         @foreach (var food in meal.Foods)
                                         {
-                                        <div class="row food align-middle">
+                                        <div class="row food">
                                             <div class="col-lg-5 foodName">
-                                                <a asp-controller="AddFood" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
-                                                    @Html.DisplayFor(model => food.FoodName)
-                                                </a>
+                                                <div class="row">
+                                                    <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                        @Html.DisplayFor(model => food.FoodName)
+                                                    </a>
+                                                </div>
+                                                <div class="row foodServing">
+
+                                                    @Html.DisplayFor(model => food.Servings)
+
+                                                    @if (food.Servings == 1)
+                                                    {
+                                                        <span> serving</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>servings</span>
+                                                    }
+
+                                                </div>
                                             </div>
-                                            <div class="col-lg-5 col-lg-offset-1 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                            <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                             <div class="col-lg-1 foodDetails">
-                                                <a asp-controller="MealPlanner" asp-action="RemoveFood" asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
                                                     <i class="fas fa-minus-circle minus"></i>
                                                 </a>
                                             </div>
                                         </div>
-                                        
                                         }
                                     </div>
                                     <div class="card-footer text-right">
-                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 4})'">
+                                        <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new { @MealID = meal.MealID, @Date = Model.Date, @MealType = 4})'">
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +384,7 @@
                                 <div class="card-body">
                                 </div>
                                 <div class="card-footer text-right">
-                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "AddFood", new {@Date = Model.Date, @MealType = 4})'">
+                                    <input type="button" value="Add Food" class="button green" onclick="location.href='@Url.Action("SearchFoodForMeal", "Food", new {@MealID = 0, @Date = Model.Date, @MealType = 4})'">
                                 </div>
                             </div>
                         </div>
@@ -298,36 +394,3 @@
         </div>
     </div>
 }
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $("#datepicker").datepicker();
-    });
-    google.charts.load('current', { 'packages': ['corechart'] });
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Macro', 'Percent total'],
-            ['Carbs', @Model.totalMacC],
-            ['Protein', @Model.totalMacP],
-            ['Fat', @Model.totalMacF]
-        ]);
-
-        var options = {
-            chartArea: { width: '100%', height: '100%' },
-            colors: ['#FCB524', '#52C0BC', '#976fe8'],
-            legend: { position: 'none' },
-            pieSliceTextStyle: { fontSize: 16 },
-            backgroundColor: '#f9f9f9',
-            animation: {
-                startup: true,
-                duration: 1000
-            }
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
-
-        chart.draw(data, options);
-    }
-</script>

@@ -1,4 +1,8 @@
-﻿.card-header {
+﻿a {
+    color: #2d303c;
+}
+
+.card-header {
     padding: .75rem 0 .2rem 1.25rem;
     margin-bottom: 0;
     background-color: white;
@@ -53,71 +57,88 @@ container-fluid {
     background-color: #f9f9f9;
 }
 
-.logo{
-    padding-top:5px;
-    padding-left:5px;
+.logo {
+    padding-top: 5px;
+    padding-left: 5px;
 }
+
 .home {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
-.hidden{
-    visibility:hidden;
+
+.hidden {
+    visibility: hidden;
+}
+
+.hiddenForever {
+    visibility: hidden !important;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-top:50px;
+    padding-top: 50px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-}
-
-/* QR code generator */
-/*#qrCode {
-    margin: 15px;
-}*/
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+.customSlider {
+    margin-right: 30px !important;
+    margin-bottom: 10px !important;
 }
 
 .feedMePrimary {
     color: #4caf50 !important;
 }
+
 .feedMeSecondary {
     color: #2e7d32 !important;
 }
+
 .feedMeTertiary {
     color: #e91e63 !important;
 }
+
+.Cals .noUi-connect {
+    background: #4caf50;
+}
+
+#MacroSlider .noUi-connect:disabled{
+    background: red !important;
+}
 .MacC {
     color: #FCB524;
-    font-weight:600;
+    font-weight: 600;
 }
+.MacCBackground {
+    background: #FCB524 !important;
+}
+    .MacC .noUi-connect {
+        background: #FCB524 !important;
+    }
+
 .MacP {
     color: #52C0BC;
     font-weight: 600;
 }
+.MacPBackground {
+    background: #52C0BC !important;
+}
+    .MacP .noUi-connect {
+        background: #52C5BC !important;
+    }
 .MacF {
     color: #976fe8;
     font-weight: 600;
 }
-
+.MacFBackground {
+    background: #976fe8 !important;
+}
+    .MacF .noUi-connect {
+        background: #976fe8 !important;
+    }
+.disabledSlider {
+    background:rgb(238, 238, 238);
+}
 .centered {
-    margin: 50px auto;
     text-align: center;
 }
 

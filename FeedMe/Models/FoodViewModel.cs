@@ -26,6 +26,12 @@ namespace FeedMe.Models
             LoadData(food);
         }
 
+        public FoodViewModel(Food food, int servings)
+        {
+            LoadData(food);
+            Servings = servings;
+        }
+
         public FoodViewModel()
         {
 
@@ -35,7 +41,7 @@ namespace FeedMe.Models
         [Required]
         [Display(Name = "Food Name ")]
         public string FoodName{ get; set; }
-        [Required]
+        
         [Display(Name = "Food Description ")]
         public string FoodDesc { get; set; }
 
@@ -62,7 +68,9 @@ namespace FeedMe.Models
         public string CreatorUsername { get; set; }
         public int CreatorID { get; set; }
         public int FoodType { get; set; }
-
+        
+        //optional field for relating servings in meal plan
+        public int? Servings { get; set; }
         public IEnumerable<Ingredient> Ingredients { get; set; }
 
         public void LoadData(Food f)
