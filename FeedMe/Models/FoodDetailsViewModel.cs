@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using FeedMe.Domains;
 using FeedMe.Services;
+using FeedMe.Web.Enumerations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -43,7 +44,9 @@ namespace FeedMe.Models
 
         public int SliderNum2 { get; set; }
 
-    }
+        public SubmitType SubmitType { get; set; }
 
+        
+    }
     
 }
