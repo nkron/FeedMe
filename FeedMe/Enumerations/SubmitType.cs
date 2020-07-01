@@ -6,9 +6,10 @@ namespace FeedMe.Web.Enumerations
 {
     public enum SubmitType
     {
-        Create = 0,
-        Update = 1,
-        CreateForMeal = 2,
-        UpdateForMeal = 3
+        Disabled = 0,
+        Create = 1,
+        Update = 2,
+        CreateForMeal = 3,
+        UpdateForMeal = 4
     }
 }

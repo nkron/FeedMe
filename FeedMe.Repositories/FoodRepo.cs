@@ -98,7 +98,7 @@ namespace FeedMe.Repositories
 
                 var param = new DynamicParameters();
                 param.Add("@FoodName", foodName, DbType.String);
-                param.Add("@fFoodDesc", foodDesc, DbType.String);
+                param.Add("@FoodDesc", foodDesc, DbType.String);
                 param.Add("@Cals", cals, DbType.Int32);
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);

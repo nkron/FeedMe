@@ -20,14 +20,14 @@ namespace FeedMe.Web.Controllers
     {
         private readonly FoodService _foodService;
         private readonly UserManager<User> _userManager;
-
+        //Break this down into search and details controllers
         public FoodController(FoodService foodService, UserManager<User> userManager)
         {
             _foodService = foodService;
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> SearchFoodForMeal(int MealID,String date, int mealType)
+        public async Task<IActionResult> SearchFoodForMeal(int MealID, String date, int mealType)
         {
             HttpContext.Session.SetInt32("MealID", MealID);
             HttpContext.Session.SetString("MealDate", date);
@@ -89,6 +89,59 @@ namespace FeedMe.Web.Controllers
         {
             return View("BrowseFood");
         }
+        public IActionResult FoodDetails(int foodID)
+        {
+            Food f = _foodService.getByID(Convert.ToInt32(foodID));
+            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
+
+
+            if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
+            {
+                vm.SubmitType = (SubmitType)2;
+            }
+            else
+            {
+                vm.SubmitType = (SubmitType)1;
+            }
+
+            ViewBag.UserID = _userManager.GetUserId(User);
+
+            return View("FoodDetails", vm);
+        }
+        public IActionResult FoodDetailsForMeal(int foodID, int mealID, string date)
+        {
+            HttpContext.Session.SetString("ReferringMealDate", date);
+            HttpContext.Session.SetInt32("ReferringMealID", mealID);
+            HttpContext.Session.SetInt32("ReferringFoodID", foodID);
+
+            Food f = _foodService.getByID(Convert.ToInt32(foodID));
+            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
+
+
+            if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
+            {
+                vm.SubmitType = (SubmitType)4;
+            }
+            else
+            {
+                vm.SubmitType = (SubmitType)3;
+            }
+
+            ViewBag.UserID = _userManager.GetUserId(User);
+
+            return View("FoodDetails", vm);
+        }       
+        public IActionResult FoodDetailsViewOnly(int foodID)
+        {
+            Food f = _foodService.getByID(Convert.ToInt32(foodID));
+            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
+
+            vm.SubmitType = (SubmitType)0;
+
+            ViewBag.UserID = _userManager.GetUserId(User);
+
+            return View("FoodDetails", vm);
+        }
         [HttpPost]
         public IActionResult SubmitFood(FoodDetailsViewModel vm)
         {
@@ -108,11 +161,11 @@ namespace FeedMe.Web.Controllers
                     //CreateForMeal
                     case 3:
                         CreateForMeal(vm);
-                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("DetailsMealDate") });
+                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("ReferringMealDate") });
                     //UpdateForMeal
                     case 4:
-                        UpdateForMeal(vm);
-                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("DetailsMealDate") });
+                        UpdateFood(vm);
+                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("ReferringMealDate") });
                     default:
                         return View("FoodDetails", vm);
                 }
@@ -125,12 +178,10 @@ namespace FeedMe.Web.Controllers
 
         }
 
-        private void UpdateForMeal(FoodDetailsViewModel vm)
+        private void UpdateFood(FoodDetailsViewModel vm)
         {
             _foodService.UpdateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, vm.FoodID);
         }
-
-        
 
         private int CreateFood(FoodDetailsViewModel vm)
         {
@@ -139,65 +190,20 @@ namespace FeedMe.Web.Controllers
         private void CreateForMeal(FoodDetailsViewModel vm)
         {
             int foodID = CreateFood(vm);
-            _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("DetailsMealID").Value);
-            _foodService.RemoveFoodFromMeal(HttpContext.Session.GetInt32("DetailsMealID").Value, HttpContext.Session.GetInt32("DetailsFoodID").Value);
-        }
-        [HttpPost]
-        public IActionResult UpdateFood(FoodDetailsViewModel vm)
-        {
-            var user = _userManager.GetUserAsync(User);
-            if (ModelState.IsValid)
-            {
-                _foodService.UpdateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, vm.FoodID);
-            }
-            ViewBag.message = vm.FoodName + " sucessfully saved!";
-            ModelState.Clear();
-            return View("NewFood", null);
+            _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("ReferringMealID").Value);
+            _foodService.RemoveFoodFromMeal(HttpContext.Session.GetInt32("ReferringMealID").Value, HttpContext.Session.GetInt32("ReferringMealID").Value);
         }
 
-        public IActionResult FoodDetailsForMeal(int foodID, int mealID, string date)
-        {
-            HttpContext.Session.SetString("DetailsMealDate", date);
-            HttpContext.Session.SetInt32("DetailsMealID", mealID);
-            HttpContext.Session.SetInt32("DetailsFoodID", foodID);
-
-            Food f = _foodService.getByID(Convert.ToInt32(foodID)); 
-            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
-
-
-            if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
-            {
-                vm.SubmitType = (SubmitType)3;
-            }
-            else
-            {
-                vm.SubmitType = (SubmitType)2;
-            }
-
-            ViewBag.UserID = _userManager.GetUserId(User);
-            
-            return View("FoodDetails", vm);
-        }
-
-        public IActionResult FoodDetails(int foodID)
-        {
-            Food f = _foodService.getByID(Convert.ToInt32(foodID));
-            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
-
-
-            if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
-            {
-                vm.SubmitType = (SubmitType)1;
-            }
-            else
-            {
-                //cast redundant here only?? I don't know why I have to cast the others at all
-                vm.SubmitType = 0;
-            }
-
-            ViewBag.UserID = _userManager.GetUserId(User);
-
-            return View("FoodDetails", vm);
-        }
+        //private IActionResult UpdateFood(FoodDetailsViewModel vm)
+        //{
+        //    var user = _userManager.GetUserAsync(User);
+        //    if (ModelState.IsValid)
+        //    {
+        //        _foodService.UpdateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, vm.FoodID);
+        //    }
+        //    ViewBag.message = vm.FoodName + " sucessfully saved!";
+        //    ModelState.Clear();
+        //    return View("NewFood", null);
+        //}
     }
 }

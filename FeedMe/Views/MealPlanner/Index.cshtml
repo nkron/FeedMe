@@ -132,7 +132,7 @@
                                             <div class="row food">
                                                 <div class="col-lg-5 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date >
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -201,7 +201,7 @@
                                             <div class="row food">
                                                 <div class="col-lg-5 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -269,7 +269,7 @@
                                             <div class="row food">
                                                 <div class="col-lg-5 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -339,7 +339,7 @@
                                         <div class="row food">
                                             <div class="col-lg-5 foodName">
                                                 <div class="row">
-                                                    <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
                                                         @Html.DisplayFor(model => food.FoodName)
                                                     </a>
                                                 </div>

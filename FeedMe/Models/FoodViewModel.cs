@@ -5,6 +5,7 @@ using System.Text;
 using FeedMe.Domains;
 using FeedMe.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FeedMe.Models
@@ -37,6 +38,7 @@ namespace FeedMe.Models
 
         }
 
+        [HiddenInput]
         public int FoodID { get; set; }
         [Required]
         [Display(Name = "Food Name ")]

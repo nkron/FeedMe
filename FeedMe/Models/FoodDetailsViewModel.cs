@@ -6,6 +6,7 @@ using FeedMe.Domains;
 using FeedMe.Services;
 using FeedMe.Web.Enumerations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FeedMe.Models
@@ -44,6 +45,7 @@ namespace FeedMe.Models
 
         public int SliderNum2 { get; set; }
 
+        [HiddenInput]
         public SubmitType SubmitType { get; set; }
 
         
