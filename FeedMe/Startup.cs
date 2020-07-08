@@ -21,6 +21,7 @@ namespace FeedMe
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            APIHelper.InitializeClient();
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +30,7 @@ namespace FeedMe
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-
+            services.AddHttpClient();
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;

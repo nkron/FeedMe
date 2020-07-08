@@ -57,6 +57,7 @@ namespace FeedMe.Web.Controllers
 
         private async Task<List<FoodViewModel>> ExecuteSearch(FoodSearchViewModel VM)
         {
+            var v = _foodService.SearchAPI();
             VM.Results.Clear();
             List<Food> results = (List<Food>)await _foodService.Search(VM.SearchName, VM.MealType, VM.CalsMin, VM.CalsMax);
             foreach (Food f in results)
