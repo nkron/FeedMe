@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FeedMe.Domains.Enumerations;
 using FeedMe.Web.Enumerations;
+using FeedMe.Repositories;
 
 namespace FeedMe.Web.Controllers
 {
@@ -57,9 +58,24 @@ namespace FeedMe.Web.Controllers
 
         private async Task<List<FoodViewModel>> ExecuteSearch(FoodSearchViewModel VM)
         {
-            var v = _foodService.SearchAPI();
             VM.Results.Clear();
             List<Food> results = (List<Food>)await _foodService.Search(VM.SearchName, VM.MealType, VM.CalsMin, VM.CalsMax);
+            
+            foreach (Food f in results)
+            {
+                VM.Results.Add(new FoodViewModel(f));
+            }
+
+            VM.Results.AddRange((List<FoodViewModel>)ExecuteAPISearch(VM).Result);
+
+            VM.Date = HttpContext.Session.GetString("MealDate");
+            return VM.Results;
+        }
+
+        private async Task<List<FoodViewModel>> ExecuteAPISearch(FoodSearchViewModel VM)
+        {
+            VM.Results.Clear();
+            List<Food> results = (List<Food>) await APIHelper.SearchFood(VM.SearchName);
             foreach (Food f in results)
             {
                 VM.Results.Add(new FoodViewModel(f));

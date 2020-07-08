@@ -43,7 +43,7 @@ namespace FeedMe.Repositories
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
-
+                //Add logic to add api foods (also update db for this?)
                 var param = new DynamicParameters();
                 param.Add("@DateUsed", date, DbType.Date);
                 param.Add("@MealType", mealType, DbType.Int32);

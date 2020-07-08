@@ -13,24 +13,58 @@ namespace FeedMe.Repositories
     public static class APIHelper
     {
         private static HttpClient client = new HttpClient();
-        public async static Task<IEnumerable<FoodAPI>> GetFoods()
+        public async static Task<List<Food>> SearchFood(string foodName)
         {
-            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a&ingr=chicken tenders";
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Uri);
-            HttpResponseMessage response = new HttpResponseMessage();
-
-            
-            response = await client.SendAsync(request);
-
-
-            if (response.IsSuccessStatusCode)
+            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a";
+            if (foodName == null)
             {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<FoodAPI>>();                
+                //requires a value and dont know what else to do for default
+                Uri += "&ingr=a";
             }
             else
             {
-                return null;
+                Uri += "&ingr=" + foodName;
             }
+            HttpResponseMessage response = await client.GetAsync(Uri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                APIFoods f = JsonConvert.DeserializeObject<APIFoods>(response.Content.ReadAsStringAsync().Result);
+                return ConvertAPIFoodsToFood(f);
             }
+            else
+            {
+                throw new Exception("Application failed to access API at address: " +Uri);
+            }
+        }
+        private static List<Food> ConvertAPIFoodsToFood(APIFoods FoodsIn)
+        {
+            List<Food> f = new List<Food>();
+            for (int i = 0; i < FoodsIn.hints.Length; i++)
+            {
+                f.Add(new Food(FoodsIn.hints[i].food));
+            }
+            return f;
+        }
+        public static CatFact GetCatFact()
+        {
+            string Uri = "https://cat-fact.herokuapp.com/facts/random";
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            response = client.GetAsync(Uri).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                CatFact output = response.Content.ReadFromJsonAsync<CatFact>().Result;
+                return output;
+            }
+            else
+            {
+                throw new Exception("Application failed to access API at address: " + Uri);
+            }
+        }
+
+        
     }
 }
+

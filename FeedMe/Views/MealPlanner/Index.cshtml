@@ -130,7 +130,8 @@
                                         @foreach (var food in meal.Foods)
                                         {
                                             <div class="row food">
-                                                <div class="col-lg-5 foodName">
+                                                <div class="col-lg-2"><img style="width:75px;" src=@food.ImageURL></div>
+                                                <div class="col-lg-3 foodName">
                                                     <div class="row">
                                                         <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
                                                             @Html.DisplayFor(model => food.FoodName)

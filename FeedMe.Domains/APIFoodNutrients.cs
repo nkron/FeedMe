@@ -7,10 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FeedMe.Domains
 {
 
-    public class FoodNutrientsAPI
-    {
-
-        public class Rootobject
+        public class APIFoodNutrients
         {
             public string uri { get; set; }
             public float yield { get; set; }
@@ -141,5 +138,4 @@ namespace FeedMe.Domains
             public string status { get; set; }
         }
 
-    }
 }

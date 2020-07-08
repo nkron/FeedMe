@@ -10,8 +10,29 @@ namespace FeedMe.Domains
     [Table("Foods")]
     public class Food
     {
+        public Food()
+        {
+        }
+
+        public Food(FoodForApi f)
+        {
+            FoodID = 0;
+            APIFoodID = f.foodId;
+            string s = f.label;
+            FoodName = s;
+            MacC = Convert.ToInt32(f.nutrients.CHOCDF);
+            MacP = Convert.ToInt32(f.nutrients.PROCNT);
+            MacF = Convert.ToInt32(f.nutrients.FAT);
+            Cals = Convert.ToInt32(f.nutrients.ENERC_KCAL);
+            ImageURL = f.image;
+            CreatorID = 10;
+        }
+
         [Column("FoodID")]
         public int FoodID { get; set; }
+        [Column("ImageURL")]
+        public string ImageURL { get; set; }
+        public string APIFoodID { get; set; }
 
         [Column("FoodName")]
         public string FoodName { get; set; }

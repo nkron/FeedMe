@@ -21,7 +21,6 @@ namespace FeedMe
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            APIHelper.InitializeClient();
         }
 
         public IConfiguration Configuration { get; }

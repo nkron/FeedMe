@@ -52,11 +52,5 @@ namespace FeedMe.Services
         {
             return _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID);
         }
-
-        public Task<IEnumerable<FoodAPI>> SearchAPI()
-        {
-            var a = APIHelper.GetFoods();
-            return a;
-        }
     }
 }

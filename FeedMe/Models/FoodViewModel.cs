@@ -40,6 +40,8 @@ namespace FeedMe.Models
 
         [HiddenInput]
         public int FoodID { get; set; }
+        [HiddenInput]
+        public string APIFoodID { get; set; }
         [Required]
         [Display(Name = "Food Name ")]
         public string FoodName{ get; set; }
@@ -69,6 +71,7 @@ namespace FeedMe.Models
         [Display(Name = "created by ")]
         public string CreatorUsername { get; set; }
         public int CreatorID { get; set; }
+        public string ImageURL { get; set; }
         public int FoodType { get; set; }
         
         //optional field for relating servings in meal plan
@@ -86,6 +89,13 @@ namespace FeedMe.Models
             Cals = f.Cals;
             DateCreated = f.DateCreated;
             CreatorID = f.CreatorID;
+            if (f.ImageURL==null) {
+                ImageURL = "https://i.imgur.com/e1IsvyR.png";
+            }
+            else
+            {
+                ImageURL = f.ImageURL;
+            }
             //todo:add username
             //CreatorUsername = _userManager.FindByIdAsync(f.CreatorID.ToString()).Result.Username;
                          
