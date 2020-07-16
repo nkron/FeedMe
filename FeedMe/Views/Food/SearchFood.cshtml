@@ -9,14 +9,14 @@
     </head>
     <h1>Add Food to @Model.Date</h1>
     <form>
-        <div class="card" style="padding:15px;">
+        <div class="card col-lg-8 col-lg-offset-2" style="padding:15px;">
             <h2>Food Search</h2>
             <div class="card-body">
-                <div class="row" style="padding-left:20px";>
+                <div class="row" style="padding-left:20px" ;>
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="form-group">
-                                    @Html.LabelFor(model => model.SearchName)<br />
+                                @Html.LabelFor(model => model.SearchName)<br />
                                 @Html.TextBoxFor(model => model.SearchName)
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                                 @Html.TextBoxFor(model => model.MacFMin, new { htmlAttributes = new { id = "MacFMin" } })
                                 @Html.TextBoxFor(model => model.MacFMax, new { htmlAttributes = new { id = "MacFMax" } })
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="form-group">
                 <table class="table table-hover">
                     <tr>
@@ -84,12 +84,12 @@
                         <th>
                             Calories
                         </th>
-                        <th>
+                        <th class="MacC">
                             Carbs
                         </th>
-                        <th>
+                        <th class="MacP">
                             Protein
-                        <th>
+                        <th class="MacF">
                             Fat
                         </th>
                         <th>
@@ -98,28 +98,29 @@
                     <tbody>
                         @foreach (var item in Model.Results)
                         {
-                            <tr onclick="AddToMeal(@item.FoodID)">
+                            <tr>
                                 <td style="width:100px;"><img style="width:75px;" src=@item.ImageURL></td>
                                 <td>
-                                    <a asp-controller="Food" asp-action="ViewFoodDetails" asp-route-foodID=@item.FoodID>
-                                        @Html.DisplayFor(model => item.FoodName)
-                                    </a>
+                                    @item.FoodName
                                 </td>
                                 <td>
                                     @item.Cals
                                 </td>
-                                <td>
+                                <td class="MacC">
                                     @item.MacC
                                 </td>
-                                <td>
+                                <td class="MacP">
                                     @item.MacP
                                 </td>
-                                <td>
+                                <td class="MacF">
                                     @item.MacF
                                 </td>
                                 <td>
                                     @*add button and/or click on row *@
-                                    @Html.ActionLink("Add", "AddToMeal", "Food", new { foodID = item.FoodID }, null)
+                                    @*@Html.ActionLink("Add", "AddToMeal", "Food", new { vm = item }, null)*@
+                                    <a asp-controller="Food" asp-action="AddToMeal" asp-route-foodID=@item.FoodID asp-route-APIFoodID=@item.APIFoodID asp-route-FoodName="@item.FoodName" asp-route-Cals=@item.Cals asp-route-MacC=@item.MacC asp-route-MacP=@item.MacP asp-route-MacF=@item.MacF asp-route-ImageUrl=@item.ImageURL>
+                                        Add
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -128,15 +129,10 @@
             </div>
         </div>
     </form>
-
+}
     <script src="~/lib/Slider/nouislider.js"></script>
     <script src="~/lib/Slider/wNumb.js"></script>
     <script>
-        //Fix for the arcane mystery of the dropdown not starting at default value. There is dark magic at work.
-        $(document).ready(function () {
-            $("#TypeDropDown").val(0).change();
-        })
-
         function AddToMeal(id) {
             $.ajax({
                 url: 'Food/AddToMeal',
@@ -257,7 +253,5 @@
             MacPSlider.noUiSlider.set([null, $("#MacPMax").val()]);
         });
     </script>
-
-}
 
 

@@ -29,28 +29,32 @@ namespace FeedMe.Services
             return await _FoodRepo.Search(searchName, searchType, calsMin, calsMax);
         }
 
-        public void AddFoodToExistingMeal(int foodID, int mealID)
+        public void AddFoodToExistingMeal(int foodID, int mealID, string APIFoodID)
         {
-            _FoodRepo.AddFoodToExistingMeal(foodID,mealID);
+            _FoodRepo.AddFoodToExistingMeal(foodID, mealID, APIFoodID);
             return;
         }
-        public void AddFoodToNewMeal(string date, int mealType, int foodID, int userID)
+        public void AddFoodToNewMeal(string date, int mealType, int foodID, string APIFoodID, int userID)
         {
-            _FoodRepo.AddFoodToNewMeal(date, mealType, foodID, userID);
+            _FoodRepo.AddFoodToNewMeal(date, mealType, foodID, APIFoodID, userID);
             return;
         }
-        public void RemoveFoodFromMeal(int mealID, int foodID)
+        public void RemoveFoodFromMeal(int mealID, int foodID, string APIFoodID)
         {
-            _FoodRepo.RemoveFoodFromMeal(mealID, foodID);
+            _FoodRepo.RemoveFoodFromMeal(mealID, foodID, APIFoodID);
             return;
         }
-        public void UpdateFood(string foodName, string foodDesc,int cals, int? macC, int? macF, int? macP, int foodID)
+        public void UpdateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int foodID)
         {
-            _FoodRepo.UpdateFood(foodName,foodDesc, cals, macC, macF, macP, foodID);
+            _FoodRepo.UpdateFood(foodName, foodDesc, cals, macC, macF, macP, foodID);
         }
-        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
+        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
         {
-            return _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID);
+            return _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID,APIFoodID,ImageURL);
+        }
+        public int GetAPIFoodInLocal(string apiFoodID)
+        {
+            return _FoodRepo.GetAPIFoodInLocal(apiFoodID);
         }
     }
 }

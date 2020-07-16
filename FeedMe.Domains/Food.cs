@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace FeedMe.Domains
 {
     [Serializable]
     [Table("Foods")]
     public class Food
     {
-        public Food()
-        {
-        }
-
         public Food(FoodForApi f)
         {
             FoodID = 0;
@@ -27,11 +22,38 @@ namespace FeedMe.Domains
             ImageURL = f.image;
             CreatorID = 10;
         }
+        public Food(APIFoodNutrients foodsIn)
+        {
+            APIFoodID = foodsIn.ingredients[0].parsed[0].foodId;
+            FoodName = foodsIn.ingredients[0].parsed[0].food;
+            MacC = Convert.ToInt32(foodsIn.totalNutrients.CHOCDF);
+            MacP = Convert.ToInt32(foodsIn.totalNutrients.PROCNT);
+            MacF = Convert.ToInt32(foodsIn.totalNutrients.FAT);
+            Cals = Convert.ToInt32(foodsIn.totalNutrients.ENERC_KCAL);
+            CreatorID = 10;
+        }
+
+        public Food()
+        { }
+
+        //For future food details implementation
+        //public Food(APIFoodNutrients f)
+        //{
+        //    FoodID = 0;
+        //    APIFoodID = f.ingredients[0].parsed[0].foodId;
+        //    FoodName = f.ingredients[0].parsed[0].food;
+        //    MacC = Convert.ToInt32(f.totalNutrients.CHOCDF.quantity);
+        //    MacP = Convert.ToInt32(f.totalNutrients.PROCNT.quantity);
+        //    MacF = Convert.ToInt32(f.totalNutrients.FAT.quantity);
+        //    Cals = Convert.ToInt32(f.totalNutrients.ENERC_KCAL.quantity);
+        //    CreatorID = 10;
+        //}
 
         [Column("FoodID")]
         public int FoodID { get; set; }
         [Column("ImageURL")]
         public string ImageURL { get; set; }
+        [Column("APIFoodID")]
         public string APIFoodID { get; set; }
 
         [Column("FoodName")]

@@ -47,8 +47,6 @@ namespace FeedMe
             services.AddTransient<MealRepo>();
             services.AddTransient<FoodRepo>();
             services.AddTransient<FoodService>();
-            services.AddTransient<IngRepo>();
-            services.AddTransient<IngService>();
             services.AddTransient<IUserStore<User>, UserRepo>();
             services.AddTransient<IRoleStore<UserRole>, RoleRepo>();
             services.AddIdentity<User, UserRole>()

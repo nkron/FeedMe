@@ -7,20 +7,23 @@ namespace FeedMe.Models
 {
     public class UserProfileViewModel
     {
-        [Display(Name = "First Name")]
+        [Display(Name = "First Name:")]
         public string FirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last Name:")]
         public string LastName { get; set; }
-        [Display(Name = "Username")]
+        [Display(Name = "Username:")]
         public string Username { get; set; }
+        [Range(0, 10000, ErrorMessage = "Value for Calories must be between 0 and 10000")]
         [Display(Name = "Calories:")]
         public int TargetCals { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
+        [Range(0, 100, ErrorMessage = "Percentage value for Carbs must be between 0 and 100")]
         [Display(Name = "Carbs:")]
         public int TargetMacC { get; set; }
+        [Range(0, 100, ErrorMessage = "Percentage value for Fat must be between 0 and 100")]
         [Display(Name = "Fat:")]
         public int TargetMacF { get; set; }
+        [Range(0, 100, ErrorMessage = "Percentage value for Protein must be between 0 and 100")]
         [Display(Name = "Protein:")]
         public int TargetMacP { get; set; }
 

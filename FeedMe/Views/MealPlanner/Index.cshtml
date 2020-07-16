@@ -133,7 +133,7 @@
                                                 <div class="col-lg-2"><img style="width:75px;" src=@food.ImageURL></div>
                                                 <div class="col-lg-3 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date asp-route-APIFoodID=@food.APIFoodID>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -154,7 +154,7 @@
                                                 </div>
                                                 <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                                 <div class="col-lg-1 foodDetails">
-                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID asp-route-APIFoodID=@food.APIFoodID>
                                                         <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
@@ -200,9 +200,10 @@
                                         @foreach (var food in meal.Foods)
                                         {
                                             <div class="row food">
-                                                <div class="col-lg-5 foodName">
+                                                <div class="col-lg-2"><img style="width:75px;" src=@food.ImageURL></div>
+                                                <div class="col-lg-3 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date asp-route-APIFoodID=@food.APIFoodID>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -223,7 +224,7 @@
                                                 </div>
                                                 <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                                 <div class="col-lg-1 foodDetails">
-                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID asp-route-APIFoodID=@food.APIFoodID>
                                                         <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
@@ -268,9 +269,10 @@
                                         @foreach (var food in meal.Foods)
                                         {
                                             <div class="row food">
-                                                <div class="col-lg-5 foodName">
+                                                <div class="col-lg-2"><img style="width:75px;" src=@food.ImageURL></div>
+                                                <div class="col-lg-3 foodName">
                                                     <div class="row">
-                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date asp-route-APIFoodID=@food.APIFoodID>
                                                             @Html.DisplayFor(model => food.FoodName)
                                                         </a>
                                                     </div>
@@ -291,7 +293,7 @@
                                                 </div>
                                                 <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
                                                 <div class="col-lg-1 foodDetails">
-                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID asp-route-APIFoodID=@food.APIFoodID>
                                                         <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
@@ -337,35 +339,36 @@
 
                                         @foreach (var food in meal.Foods)
                                         {
-                                        <div class="row food">
-                                            <div class="col-lg-5 foodName">
-                                                <div class="row">
-                                                    <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date>
-                                                        @Html.DisplayFor(model => food.FoodName)
+                                            <div class="row food">
+                                                <div class="col-lg-2"><img style="width:75px;" src=@food.ImageURL></div>
+                                                <div class="col-lg-3 foodName">
+                                                    <div class="row">
+                                                        <a asp-controller="Food" asp-action="FoodDetailsForMeal" asp-route-foodID=@food.FoodID asp-route-mealID=@meal.MealID asp-route-date=@Model.Date asp-route-APIFoodID=@food.APIFoodID>
+                                                            @Html.DisplayFor(model => food.FoodName)
+                                                        </a>
+                                                    </div>
+                                                    <div class="row foodServing">
+
+                                                        @Html.DisplayFor(model => food.Servings)
+
+                                                        @if (food.Servings == 1)
+                                                        {
+                                                            <span> serving</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>servings</span>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
+                                                <div class="col-lg-1 foodDetails">
+                                                    <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID asp-route-APIFoodID=@food.APIFoodID>
+                                                        <i class="fas fa-minus-circle minus"></i>
                                                     </a>
                                                 </div>
-                                                <div class="row foodServing">
-
-                                                    @Html.DisplayFor(model => food.Servings)
-
-                                                    @if (food.Servings == 1)
-                                                    {
-                                                        <span> serving</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>servings</span>
-                                                    }
-
-                                                </div>
                                             </div>
-                                            <div class="col-lg-6 foodDetails"><b>Calories: @food.Cals</b>&nbsp;&nbsp;<span class="MacC">Carbs: @food.MacC</span>&nbsp;&nbsp;<span class="MacP">Protein: @food.MacP</span>&nbsp;&nbsp;<span class="MacF">Fat: @food.MacF</span></div>
-                                            <div class="col-lg-1 foodDetails">
-                                                <a asp-controller="MealPlanner" asp-action="RemoveFoodFromMeal" asp-route-date=@Model.Date asp-route-mealID=@meal.MealID asp-route-foodID=@food.FoodID>
-                                                    <i class="fas fa-minus-circle minus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
                                         }
                                     </div>
                                     <div class="card-footer text-right">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FeedMe.Domains;
 using FeedMe.Domains.Enumerations;
+using FeedMe.Repositories;
 using FeedMe.Services;
 
 namespace FeedMe.Models
@@ -64,7 +65,10 @@ namespace FeedMe.Models
 
 
             //Put each food in a foodviewmodel
+
+
             List<KeyValuePair<Food, int>> list = _FoodService.GetMealFoods(m.MealID);
+            //list.Add(APIHelper.GetFoodByID())
 
             Foods = new List<FoodViewModel>();
             foreach (KeyValuePair<Food, int> kvp in list)

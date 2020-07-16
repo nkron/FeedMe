@@ -14,12 +14,10 @@ namespace FeedMe.Models
     public class FoodDetailsViewModel : FoodViewModel
     {
         private readonly FoodService _FoodService;
-        private readonly IngService _IngService;
         private readonly UserManager<User> _userManager;
-        public FoodDetailsViewModel(FoodService foodService, IngService ingService, UserManager<User> userManager)
+        public FoodDetailsViewModel(FoodService foodService, UserManager<User> userManager)
         {
             _FoodService = foodService;
-            _IngService = ingService;
             _userManager = userManager;
 
             if(MacC.HasValue && MacF.HasValue && MacP.HasValue) { 

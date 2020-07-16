@@ -38,17 +38,33 @@ namespace FeedMe.Controllers
 
         public async Task<IActionResult> Update(UserProfileViewModel model)
         {
-            if (ModelState.IsValid) {
-                try { 
-                await _userManager.UpdateAsync(new User { FirstName = model.FirstName, LastName = model.LastName, TargetCals=model.TargetCals,
-                TargetMacC =model.TargetMacC,TargetMacF=model.TargetMacF,TargetMacP=model.TargetMacP, UserID= Convert.ToInt32(_userManager.GetUserId(User))});
+            if (model.TargetMacC + model.TargetMacF + model.TargetMacP != 100)
+            {
+                ViewBag.MacroWarning = "y";
+            }
+            else if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _userManager.UpdateAsync(new User
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        TargetCals = model.TargetCals,
+                        TargetMacC = model.TargetMacC,
+                        TargetMacF = model.TargetMacF,
+                        TargetMacP = model.TargetMacP,
+                        UserID = Convert.ToInt32(_userManager.GetUserId(User))
+                    });
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new Exception(e.ToString());
                 }
                 ViewBag.Success = "Profile successfully updated!";
             }
+            var user = await _userManager.GetUserAsync(User);
+            model.Username = user.Username;
             return View("index",model);
         }
     }

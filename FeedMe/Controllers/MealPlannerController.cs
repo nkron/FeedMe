@@ -73,12 +73,12 @@ namespace FeedMe.Controllers
             model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }
-        public async Task<IActionResult> RemoveFoodFromMeal(string date, int mealID, int foodID)
+        public async Task<IActionResult> RemoveFoodFromMeal(string date, int mealID, int foodID, string APIFoodID)
         {
             var user = await _userManager.GetUserAsync(User);
 
             DateTime dt = Convert.ToDateTime(date);
-            _foodService.RemoveFoodFromMeal(mealID,foodID);
+            _foodService.RemoveFoodFromMeal(mealID,foodID,APIFoodID);
             MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, dt);
             return View("Index", model);
         }

@@ -13,12 +13,10 @@ namespace FeedMe.Models
     public class FoodViewModel
     {
         private readonly FoodService _FoodService;
-        private readonly IngService _IngService;
         private readonly UserManager<User> _userManager;
-        public FoodViewModel(FoodService foodService, IngService ingService, UserManager<User> userManager)
+        public FoodViewModel(FoodService foodService, UserManager<User> userManager)
         {
             _FoodService = foodService;
-            _IngService = ingService;
             _userManager = userManager;
         }
 
@@ -77,11 +75,12 @@ namespace FeedMe.Models
         //optional field for relating servings in meal plan
         public int? Servings { get; set; }
         public IEnumerable<Ingredient> Ingredients { get; set; }
-
+        public Food BaseFood { get; set; }  
         public void LoadData(Food f)
         {
             //Load food data into local vars
             FoodID = f.FoodID;
+            APIFoodID = f.APIFoodID;
             FoodName = f.FoodName;
             MacC = f.MacC;
             MacF = f.MacF;
@@ -96,9 +95,10 @@ namespace FeedMe.Models
             {
                 ImageURL = f.ImageURL;
             }
+            BaseFood = f;
             //todo:add username
             //CreatorUsername = _userManager.FindByIdAsync(f.CreatorID.ToString()).Result.Username;
-                         
+
         }       
     }
 

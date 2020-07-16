@@ -30,6 +30,7 @@ namespace FeedMe.Web.Controllers
 
         public async Task<IActionResult> SearchFoodForMeal(int MealID, String date, int mealType)
         {
+            //Using session instead of hidden VM vals because it can be used by multiple methods
             HttpContext.Session.SetInt32("MealID", MealID);
             HttpContext.Session.SetString("MealDate", date);
             HttpContext.Session.SetInt32("MealType", mealType);
@@ -52,6 +53,7 @@ namespace FeedMe.Web.Controllers
             VM.SearchName = null;
             VM.MealType = 0;
             VM.Results = await ExecuteSearch(VM);
+            VM.Date = HttpContext.Session.GetString("MealDate");
             ModelState.Clear();
             return View("SearchFood", VM);
         }
@@ -60,7 +62,7 @@ namespace FeedMe.Web.Controllers
         {
             VM.Results.Clear();
             List<Food> results = (List<Food>)await _foodService.Search(VM.SearchName, VM.MealType, VM.CalsMin, VM.CalsMax);
-            
+
             foreach (Food f in results)
             {
                 VM.Results.Add(new FoodViewModel(f));
@@ -68,72 +70,67 @@ namespace FeedMe.Web.Controllers
 
             VM.Results.AddRange((List<FoodViewModel>)ExecuteAPISearch(VM).Result);
 
-            VM.Date = HttpContext.Session.GetString("MealDate");
+            VM.Date = HttpContext.Session.GetString("SearchMealDate");
             return VM.Results;
         }
 
         private async Task<List<FoodViewModel>> ExecuteAPISearch(FoodSearchViewModel VM)
         {
             VM.Results.Clear();
-            List<Food> results = (List<Food>) await APIHelper.SearchFood(VM.SearchName);
+            List<Food> results = (List<Food>)await APIHelper.SearchFood(VM.SearchName);
             foreach (Food f in results)
             {
                 VM.Results.Add(new FoodViewModel(f));
             }
-            VM.Date = HttpContext.Session.GetString("MealDate");
+            VM.Date = HttpContext.Session.GetString("SearchMealDate");
             return VM.Results;
         }
 
-        public IActionResult AddToMeal(int foodID)
+
+        //public IActionResult FoodDetails(int foodID)
+        //{
+        //    Food f = _foodService.getByID(Convert.ToInt32(foodID));
+        //    FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
+
+
+        //    if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
+        //    {
+        //        vm.SubmitType = (SubmitType)2;
+        //    }
+        //    else
+        //    {
+        //        vm.SubmitType = (SubmitType)1;
+        //    }
+
+        //    ViewBag.UserID = _userManager.GetUserId(User);
+
+        //    return View("FoodDetails", vm);
+        //}
+        public IActionResult FoodDetailsForMealSearch(int foodID, string apiID, string imageURL)
         {
-            var user = _userManager.GetUserAsync(User);
-            if (HttpContext.Session.GetInt32("MealID").Value == 0)
-            {
-                _foodService.AddFoodToNewMeal(HttpContext.Session.GetString("MealDate"), HttpContext.Session.GetInt32("MealType").Value, foodID, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            }
-            else
-            {
-                _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("MealID").Value);
-            }
-            return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
+            return FoodDetails(foodID, HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetString("MealDate"),apiID,imageURL);
         }
 
-        public IActionResult NewFood()
-        {
-            return View("NewFood");
-        }
-        public IActionResult BrowseFood()
-        {
-            return View("BrowseFood");
-        }
-        public IActionResult FoodDetails(int foodID)
-        {
-            Food f = _foodService.getByID(Convert.ToInt32(foodID));
-            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
-
-
-            if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
-            {
-                vm.SubmitType = (SubmitType)2;
-            }
-            else
-            {
-                vm.SubmitType = (SubmitType)1;
-            }
-
-            ViewBag.UserID = _userManager.GetUserId(User);
-
-            return View("FoodDetails", vm);
-        }
         public IActionResult FoodDetailsForMeal(int foodID, int mealID, string date)
         {
-            HttpContext.Session.SetString("ReferringMealDate", date);
-            HttpContext.Session.SetInt32("ReferringMealID", mealID);
-            HttpContext.Session.SetInt32("ReferringFoodID", foodID);
-
-            Food f = _foodService.getByID(Convert.ToInt32(foodID));
-            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
-
+            HttpContext.Session.SetString("MealDate", date);
+            HttpContext.Session.SetInt32("MealID", mealID);
+            HttpContext.Session.SetInt32("FoodID", foodID);
+            return FoodDetails(foodID, mealID, date,null,null);
+        }
+        public IActionResult FoodDetails(int foodID, int mealID, string date,string apiID,string imageURL)
+        {
+            Food f;
+            FoodDetailsViewModel vm;
+            //Used to get API Food Details in future
+            //if (foodID == 0)
+            //{
+            //    f = APIHelper.GetFoodByID(apiID).Result;
+            //    vm = new FoodDetailsViewModel(f);
+            //    vm.ImageURL = imageURL;
+            //}
+            f = _foodService.getByID(Convert.ToInt32(foodID));
+                vm = new FoodDetailsViewModel(f);
 
             if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
             {
@@ -143,17 +140,6 @@ namespace FeedMe.Web.Controllers
             {
                 vm.SubmitType = (SubmitType)3;
             }
-
-            ViewBag.UserID = _userManager.GetUserId(User);
-
-            return View("FoodDetails", vm);
-        }       
-        public IActionResult FoodDetailsViewOnly(int foodID)
-        {
-            Food f = _foodService.getByID(Convert.ToInt32(foodID));
-            FoodDetailsViewModel vm = new FoodDetailsViewModel(f);
-
-            vm.SubmitType = (SubmitType)0;
 
             ViewBag.UserID = _userManager.GetUserId(User);
 
@@ -178,11 +164,11 @@ namespace FeedMe.Web.Controllers
                     //CreateForMeal
                     case 3:
                         CreateForMeal(vm);
-                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("ReferringMealDate") });
+                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
                     //UpdateForMeal
                     case 4:
                         UpdateFood(vm);
-                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("ReferringMealDate") });
+                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
                     default:
                         return View("FoodDetails", vm);
                 }
@@ -202,15 +188,61 @@ namespace FeedMe.Web.Controllers
 
         private int CreateFood(FoodDetailsViewModel vm)
         {
-            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
+        }
+        private int CreateFood(FoodViewModel vm)
+        {
+            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
+        }
+        private int CreateFood(string FoodName, string FoodDesc, int Cals, int MacC, int MacF, int MacP, string APIFoodID, string ImageURL)
+        {
+            return _foodService.CreateFood(FoodName, FoodDesc, Cals, MacC, MacF, MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), APIFoodID, ImageURL);
         }
         private void CreateForMeal(FoodDetailsViewModel vm)
         {
             int foodID = CreateFood(vm);
-            _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("ReferringMealID").Value);
-            _foodService.RemoveFoodFromMeal(HttpContext.Session.GetInt32("ReferringMealID").Value, HttpContext.Session.GetInt32("ReferringMealID").Value);
+            _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("MealID").Value, null);
+            //meal id twice?
+            _foodService.RemoveFoodFromMeal(HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetString("FoodID"));
+        }
+        public IActionResult AddToMeal(int FoodID, string APIFoodID, int Cals, int MacC, int MacF, int MacP, string FoodName, string ImageURL)
+        {
+            int foodID = FoodID;
+            //Create API food in db if local version doesn't already exist
+            if (APIFoodID != null)
+            {
+                int f = _foodService.GetAPIFoodInLocal(APIFoodID);
+                if (f == 0)
+                {
+                    foodID = CreateFood(FoodName, null, Cals, MacC, MacF, MacP, APIFoodID, ImageURL);
+                }
+
+                else
+                {
+                    foodID = f;
+                }
+            }
+            var user = _userManager.GetUserAsync(User);
+            if (HttpContext.Session.GetInt32("MealID").Value == 0)
+            {
+                _foodService.AddFoodToNewMeal(HttpContext.Session.GetString("MealDate"), HttpContext.Session.GetInt32("MealType").Value, foodID, APIFoodID, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            }
+            else
+            {
+                _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("MealID").Value, APIFoodID);
+            }
+            return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
+
         }
 
+        public IActionResult NewFood()
+        {
+            return View("NewFood");
+        }
+        public IActionResult BrowseFood()
+        {
+            return View("BrowseFood");
+        }
         //private IActionResult UpdateFood(FoodDetailsViewModel vm)
         //{
         //    var user = _userManager.GetUserAsync(User);

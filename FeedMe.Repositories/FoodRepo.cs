@@ -21,26 +21,43 @@ namespace FeedMe.Repositories
         }
         public List<KeyValuePair<Food, int>> GetMealFoods(int mealID)
         {
-            //Returns Food and Serving amount as KVP. Recording servings in Food Domain breaks with the DB model.
+            //Returns Foods and associated Servings
+
+            //Get foodIDs and servings from mealfoods that are api-only
+
+            //Get list of foods from apihelper
+            //Combine food list and servings to kvp
+            //Run same process for foods stored in feedme db
+            //combine kvps
 
             List<KeyValuePair<Food,int>> list = new List<KeyValuePair<Food,int>>();
             List<int> servings;
             List<Food> foods;
+            
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
-                foods = (List<Food>)connection.Query<Food>("dbo.GetFoods @MealID ", new { MealID = mealID });
+                foods = (List<Food>)connection.Query<Food>("dbo.GetFoodsForMeal @MealID ", new { MealID = mealID });
                 
                 servings = (List<int>)connection.Query<int>("dbo.GetFoodServings @MealID ", new { MealID = mealID });
             }
+
             for (int i = 0;i<foods.Count;i++)
             {
                 list.Add(new KeyValuePair<Food, int>(foods[i],servings[i]));
             }
+
             return list;
         }
-
-        public void AddFoodToNewMeal(string date, int mealType, int foodID, int userID)
+        //Returns 0 if API food isn't associated with a food in DB
+        public int GetAPIFoodInLocal(string @APIFoodId)
         {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
+            {
+                return connection.Query<int>("dbo.GetAPIFoodIfExists @APIFoodID ", new { APIFoodID = @APIFoodId}).FirstOrDefault();
+            }
+        }
+        public void AddFoodToNewMeal(string date, int mealType, int foodID, string APIFoodID, int userID)
+        {           
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
                 //Add logic to add api foods (also update db for this?)
@@ -49,7 +66,7 @@ namespace FeedMe.Repositories
                 param.Add("@MealType", mealType, DbType.Int32);
                 param.Add("@FoodID", foodID, DbType.Int32);
                 param.Add("@UserID", userID, DbType.Int32);
-
+                param.Add("@APIFoodID", APIFoodID, DbType.String);
                 var i = connection.Execute(
                     "dbo.AddFoodToNewMeal",
                     param,
@@ -57,7 +74,7 @@ namespace FeedMe.Repositories
                 return;
             }
         }
-        public void AddFoodToExistingMeal(int foodID, int mealID)
+        public void AddFoodToExistingMeal(int foodID, int mealID, string APIFoodID)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -65,6 +82,7 @@ namespace FeedMe.Repositories
                 var param = new DynamicParameters();
                 param.Add("@MealID", mealID, DbType.Int32);
                 param.Add("@FoodID", foodID, DbType.Int32);
+                param.Add("@APIFoodID", APIFoodID, DbType.String);
 
                 var i = connection.Execute(
                     "dbo.AddFoodToExistingMeal",
@@ -73,13 +91,14 @@ namespace FeedMe.Repositories
                 return;
             }
         }
-        public void RemoveFoodFromMeal(int mealID, int foodID)
+        public void RemoveFoodFromMeal(int mealID, int foodID, string APIFoodID)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
 
                 var param = new DynamicParameters();
                 param.Add("@FoodID", foodID, DbType.Int32);
+                param.Add("@APIFoodID", APIFoodID, DbType.String);
                 param.Add("@MealID", mealID, DbType.Int32);
                 var i = connection.Execute(
                     "dbo.DeleteFoodFromMeal",
@@ -112,7 +131,7 @@ namespace FeedMe.Repositories
                 return;
             }
         }
-        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID)
+        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -125,8 +144,9 @@ namespace FeedMe.Repositories
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);
                 param.Add("@MacF", macF, DbType.Int32);
-                param.Add("@creatorID", creatorID, DbType.Int32);
-                 
+                param.Add("@CreatorID", creatorID, DbType.Int32);
+                param.Add("@APIFoodID", APIFoodID, DbType.String);
+                param.Add("@ImageURL", ImageURL, DbType.String);
                 return connection.Query<int>(
                     procedureName,
                     param,
@@ -158,6 +178,7 @@ namespace FeedMe.Repositories
             }
         }
 
+        //Needs to be updated
         public IEnumerable<Meal> GetFavorites(int ID)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
@@ -166,6 +187,7 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
+        //Needs to be updated
         public IEnumerable<Meal> AddToFavorites(int ID)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
@@ -174,16 +196,5 @@ namespace FeedMe.Repositories
                 return output;
             }
         }
-        //public bool AddMealFoods(int mealID, List<int> foodIDs)
-        //{
-        //    using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
-        //    {
-        //        foreach(int i in foodIDs){
-        //            connection.Execute(("dbo.AddMealFood @MealID, @FoodID", new { MealID = mealID, FoodID = i }));
-        //        }
-        //        var output = connection.Query(("dbo.GetUser @UserID", new { meal = ID }));
-        //        return true;
-        //    }
-        //}
     }
 }

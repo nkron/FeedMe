@@ -13,6 +13,7 @@ namespace FeedMe.Repositories
     public static class APIHelper
     {
         private static HttpClient client = new HttpClient();
+
         public async static Task<List<Food>> SearchFood(string foodName)
         {
             string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a";
@@ -34,7 +35,7 @@ namespace FeedMe.Repositories
             }
             else
             {
-                throw new Exception("Application failed to access API at address: " +Uri);
+                throw new Exception("Application failed to access API at address: " + Uri);
             }
         }
         private static List<Food> ConvertAPIFoodsToFood(APIFoods FoodsIn)
@@ -45,6 +46,11 @@ namespace FeedMe.Repositories
                 f.Add(new Food(FoodsIn.hints[i].food));
             }
             return f;
+        }
+        private static Food ConvertAPIFoodsToFood(APIFoodNutrients FoodsIn)
+        {
+                return  new Food(FoodsIn);
+         
         }
         public static CatFact GetCatFact()
         {
@@ -64,7 +70,33 @@ namespace FeedMe.Repositories
             }
         }
 
-        
+        //Cannot get foods by ID because of API BS. Need to pass all available measurements to even get basic info
+        //public async static Task<Food> GetFoodByID(string id)
+        //{
+        //    string Uri = "https://api.edamam.com/api/food-database/v2/nutrients?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a";
+        //    var values = new List<KeyValuePair<string, string>>();
+        //    values.Add(new KeyValuePair<string, string>("quantity", "1"));
+        //    values.Add(new KeyValuePair<string, string>("measureURI", "http://www.edamam.com/ontologies/edamam.owl#Measure_serving"));
+        //    values.Add(new KeyValuePair<string, string>("foodID", "food_b5sq39gblijoq7br7zwkiby5nf22"));
+        //    var content = new FormUrlEncodedContent(values);
+
+        //    string data = @"{""ingredients"":[{""quantity"":1,""measureURI"":""http://www.edamam.com/ontologies/edamam.owl#Measure_serving"",""foodId"":"+ (char)34 + id + (char)34 +"}]}";
+
+
+
+        //    var response = await client.PostAsJsonAsync(Uri, data);
+
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        APIFoodNutrients f = JsonConvert.DeserializeObject<APIFoodNutrients>(response.Content.ReadAsStringAsync().Result);
+        //        return ConvertAPIFoodsToFood(f);
+        //    }
+        //    else
+        //    {
+                
+        //        throw new Exception("Application failed to access API at address: " + Uri + " : "+ response.StatusCode.ToString());
+        //    }
+        //}
     }
 }
 

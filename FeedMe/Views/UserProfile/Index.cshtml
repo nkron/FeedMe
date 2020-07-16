@@ -1,100 +1,134 @@
-﻿@page
-@model FeedMe.Models.UserProfileViewModel
-@{
-    <style>
-        .nutrition-card {
-            background-color: #f8f9fa;
-            border-radius: 25px;
-        }
+﻿@model FeedMe.Models.UserProfileViewModel
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
 
-        .target {
-            text-align: left;
-            padding-right: 0;
-        }
+        function drawChart() {
 
-        .smallTxt {
-            width: 5em;
-        }
+            var data = google.visualization.arrayToDataTable([
+                ['Macro', 'Percent total'],
+                ['Carbs', Number(document.getElementById("MacCP").value)],
+                ['Protein', Number(document.getElementById("MacPP").value)],
+                ['Fat', Number(document.getElementById("MacFP").value)]
+            ]);
+            var options = {
+                chartArea: { width: '100%', height: '100%' },
+                colors: ['#FCB524', '#52C0BC', '#976fe8'],
+                legend: { position: 'none' },
+                pieSliceTextStyle: { fontSize: 16 },
+                backgroundColor: '#f9f9f9',
+                animation: {
+                    startup: true,
+                    duration: 1000
+                }
+            };
+            $(document).ready(function () {
+                $('#body').css("opacity", 1);
+            });
 
-        .smallerTxt {
-            width: 3em;
-        }
+            var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
 
-        .percent {
-            text-align: left;
-            padding-left: 0;
-            margin-left: 0;
-            vertical-align: bottom;
+            chart.draw(data, options);
         }
+        function CheckPercentage() {
+            if (100 != Number(document.getElementById("MacCP").value) + Number(document.getElementById("MacPP").value) + Number(document.getElementById("MacFP").value)) {
+                $("#MacroWarning").removeClass("hidden");
+            }
 
-        .form-input-label {
-            display: inline-block;
-            float: left;
-            padding-top: 6px;
+
         }
-    </style>
-    @*<div class="container" style="margin-top:30px">*@
-    <row>
-        <h3 class="text-center">@ViewBag.Success</h3>
-    </row>
-    <div class="row">
-        <div class="col-lg-2">@Html.LabelFor(model => model.Username)</div>
-        <div class="col-lg-2">@Html.DisplayFor(model => model.Username)</div>
-    </div>
-    @using (Html.BeginForm("Update", "UserProfile"))
-    {
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-lg-2">@Html.LabelFor(model => model.FirstName)</div>
-                <div class="col-lg-2">@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })</div>
+    </script>
+</head>
+@using (Html.BeginForm("Update", "UserProfile"))
+{
+    <div class="col-lg-8 col-lg-offset-2">
+        <row>
+            <h3 class="text-center">@ViewBag.Success</h3>
+        </row>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-lg-2">@Html.LabelFor(model => model.LastName)</div>
-                <div class="col-lg-2">@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })</div>
+    </div>
+
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label asp-for="FirstName"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-lg-3">
+                    <label asp-for="LastName"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="card nutrition-card">
+            <div class="card-header">
+                <h3>Nutrition Targets</h3>
+            </div>
             <div class="card-body">
-                <h4>Nutrition Targets</h4>
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label asp-for="TargetCals"></label>
+                            <input asp-for="TargetCals" class="form-control" />
+                            <span asp-validation-for="TargetCals" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label asp-for="TargetMacC" class="MacC"></label>
+                            <input asp-for="TargetMacC" class="form-control" id="MacCP" />
+                            <span asp-validation-for="TargetMacC" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label asp-for="TargetMacP" class="MacP"></label>
+                            <input asp-for="TargetMacP" class="form-control" id="MacPP" />
+                            <span asp-validation-for="TargetMacP" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label asp-for="TargetMacF" class="MacF"></label>
+                            <input asp-for="TargetMacF" class="form-control" id="MacFP" />
+                            <span asp-validation-for="TargetMacF" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                <div class="text-center">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-lg-1">@Html.LabelFor(model => model.TargetCals)</div>
-                            <div class="col-lg-3 target">@Html.TextBoxFor(model => model.TargetCals, new { @class = "smallTxt form-control" })</div>
-
+                    @if (ViewBag.MacroWarning != null)
+                    {
+                        <div class="col-lg-12 alert alert-danger centered" id="MacroWarning">
+                            <div class="row">
+                                Macro percentages must add up to 100
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row text-center">
-                            <div class="col-lg-1">@Html.LabelFor(model => model.TargetMacC)</div>
-                            <div class="col-lg-1 target">@Html.TextBoxFor(model => model.TargetMacC, new { @class = "smallerTxt form-control" })</div>
-                            <span class="form_input_label">%</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row text-center">
-                            <div class="col-lg-1">@Html.LabelFor(model => model.TargetMacP)</div>
-                            <div class="col-lg-3 target">@Html.TextBoxFor(model => model.TargetMacP, new { @class = "smallerTxt form-control" })%</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-lg-1">@Html.LabelFor(model => model.TargetMacF)</div>
-                            <div class="col-lg-3 target">@Html.TextBoxFor(model => model.TargetMacF, new { @class = "smallerTxt form-control" })%</div>
-                        </div>
-                    </div>
+                    }
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="row text-center"><h6>Macros by Percentage:</h6></div>
+                    <div id="chartContainer"></div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary pull-right">Save Changes</button>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-primary pull-right">Save Changes</button>
+            </div>
         </div>
-
-
-
-
-    }
-    @*</div>*@
+    </div>
 }
+
+
+
+
+
