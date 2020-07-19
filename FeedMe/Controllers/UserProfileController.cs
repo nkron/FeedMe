@@ -35,8 +35,31 @@ namespace FeedMe.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        public async Task<IActionResult> Update(UserProfileViewModel model)
+        public async Task<bool> UpdateMacros(int cals, int macC, int macP, int macF)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.TargetCals = cals;
+            user.TargetMacC = macC;
+            user.TargetMacP = macP;
+            user.TargetMacF = macF;
+            try
+            {
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.ToString());
+            }
+        }
+            public async Task<IActionResult> Update(UserProfileViewModel model)
         {
             if (model.TargetMacC + model.TargetMacF + model.TargetMacP != 100)
             {

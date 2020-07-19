@@ -4,6 +4,7 @@ using FeedMe.Services;
 using FeedMe.Domains;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FeedMe.Models
 {
@@ -29,7 +30,8 @@ namespace FeedMe.Models
         public String Day { get; set; }
         public String DayWord { get; set; }
         public List<MealDetailsViewModel> meals { get; set; }
-
+        [HiddenInput]
+        public bool FirstTime { get; set; }
         public MealPlannerViewModel()
         {
 

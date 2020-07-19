@@ -5,10 +5,10 @@
         <link rel="stylesheet" href="~/css/planner.css" />
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
-    google.charts.load('current', { 'packages': ['corechart'] });
-    google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+        function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Macro', 'Percent total'],
             ['Carbs', @Model.totalMacC],
@@ -24,21 +24,253 @@
             backgroundColor: '#f9f9f9',
             animation: {
                 startup: true,
-                duration: 1000
-            }
-        };
+                    duration: 1000
+                }
+            };
+            $(document).ready(function () {
+                $('#body').css("opacity", 1);
+            });
+
+            var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
+
+            chart.draw(data, options);
+        }
+
         $(document).ready(function () {
-            $('#body').css("opacity", 1);
+            if (document.getElementById("firstTime")) {
+                $('#welcomeModal').modal();
+            }
         });
 
-        var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
+            var goal=0;
+            var activity=0;
+            function activateCalculator() {
+                $('#welcomeModal').modal('hide')
+                $('#calculatorModal').modal();
+            }
+            function GoalSelect(button) {
+                $("#GoalRow .button").removeClass("green");
+                $(button).addClass("green")
+                goal = $(button).val();
+            }
+            function ActivitySelect(button) {
+                $("#ActivityRow .button").removeClass("green");
+                $(button).addClass("green")
+                activity = $(button).val();
+            }
+            function CalcMacros() {
+                $("#Warning").hide();
+                var age = $("#Age").val();
+                var weight = $("#Weight").val();
+                //Validate
+                if (isNaN(age) || isNaN(weight) || age == null || weight == null || age == '' || weight == '') {
+                    $("#WarningTxt").text("Must enter numbers for all fields");
+                    $("#Warning").show();
+                }
+                else if (age > 120 || age < 18) {
+                    $("#WarningTxt").text("Enter an age between 18 and 120");
+                    $("#Warning").show();
+                }
+                else if (weight < 50 || weight > 500) {
+                    $("#WarningTxt").text("Enter a number between 50 and 500");
+                    $("#Warning").show();
+                }
+                else {
+                    var calcCals = 0;
+                    var calcMacC = 0;
+                    var calcMacP = 0;
+                    var calcMacF = 0;
+                    var age = $("#Age").val();
+                    var weight = Number($("#Weight").val()) * 0.453592; //convert to metric
+                    var height; //convert to metric
+                    var sex = $("input[name='sex']:checked").val();
+                    var calories;
+                    //calc basal metabolic rate
+                    if (sex == 0) {
+                        calories = 66.5 + (13.7 * weight) + (5 * 180) - (6.76 * age);
+                    }
+                    else {
+                        calories = 655 + (9.56 * weight) + (1.8 * 180) - (4.68 * age);
+                    }
+                    //modify for activity level
+                    switch (activity) {
+                        case 0:
+                            calories *= 1.2;
+                            break;
+                        case 1:
+                            calories *= 1.35;
+                            break;
+                        case 2:
+                            calories *= 1.55;
+                            break;
+                        case 3:
+                            calories *= 1.7;
+                            break;
+                    } 
+                    //modify for goals
+                    switch (activity) {
+                        case 0:
+                            calories -=400;
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            calories +=400;
+                            break;
+                    }
+                    //calculate macros from cals
 
-        chart.draw(data, options);
-    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/UserProfile/UpdateMacros',
+                        data: { cals: calcCals, MacC: calcMacC, MacP: calcMacP, MacF: calcMacF },
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log(result);
+                        }
+                    })
+                    //json update user info
+                    //update macro targets manually
+                    //either close window or display macros and an ok button
+                }
+        }
         </script>
     </head>
     <noscript><h1>Please enable javascript to continue.</h1></noscript>
 
+    <div id="welcomeModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="WelcomeTitle" class="modal-title text-center feedMePrimary">Welcome to FeedMe!</h2>
+                    <h4 id="CalculatorTitle" class="modal-title" hidden> Macro Calculator</h4>
+                </div>
+                <div class="modal-body" style="font-size:18px;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <span>
+                                FeedMe is a handy meal tracker and meal generator (or it will be, eventually)!
+                            </span>
+                            <br /> <br />
+                            <span>
+                                In order to help you reach your goals, we use macronutrient tracking tailored to you.
+                                Would you like to answer some questions to calculate what will work best for you?
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:15px;">
+                        <div class="col-lg-6 centered">
+                            <button id="yes" class="button green" onclick="activateCalculator();">Yes please!</button>
+                        </div>
+                        <div class="col-lg-6 centered">
+                            <button id="no" class="button blue" data-dismiss="modal">No thanks</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="calculatorModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="CalculatorTitle" class="modal-title">Macro Calculator</h2>
+                </div>
+                <div class="modal-body" style="font-size:18px;">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>Age:</label>
+                            <input type="text" id="Age" placeholder="Years" />
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Weight:</label> <input type="text" id="Weight" placeholder="Pounds" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-1">
+                            <label>Sex:</label>
+                        </div>
+                        <div class="col-xs-11">
+                            <span for="male">Male</span>
+                            <input type="radio" name="sex" value="0" checked="checked">
+                            &nbsp;&nbsp;&nbsp;
+                            <span for="female">Female</span>
+                            <input type="radio" name="sex" value="1"><br>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-12">
+                            <h3>Select your goal</h3>
+                        </div>
+                    </div>
+                    <div class="row centered" id="GoalRow">
+                        <div class="col-lg-4 col-xs-4">
+                            <button id="Lose" class="button green calcBtn" onclick="GoalSelect(this)" value="0">
+                                <i class="fas fa-carrot calculatorIcon"></i>
+                                <br />
+                                <span>Lose Weight</span>
+                            </button>
+                        </div>
+                        <div class="col-lg-4 col-xs-4">
+                            <button id="Maintain" class="button calcBtn" onclick="GoalSelect(this)" value="1">
+                                <i class="fas fa-balance-scale-left calculatorIcon"></i>
+                                <br />
+                                <span>Maintenance</span>
+                            </button>
+                        </div>
+                        <div class="col-lg-4 col-xs-4">
+                            <button id="Build" class="button calcBtn" onclick="GoalSelect(this)"value="2">
+                                <i class="fas fa-dumbbell calculatorIcon"></i>
+                                <br />
+                                <span>Build Muscle</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-12">
+                            <h3>Select your activity level</h3>
+                        </div>
+                    </div>
+                    <div class="row" id="ActivityRow">
+                        <div class="col-xs-6 col-md-3">
+                            <button id="Lose" class="button green calcBtn" value="0" onclick="ActivitySelect(this)">
+                                <i class="fas fa-couch calculatorIcon"></i>
+                                <br />
+                                <span>Sedentary</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <button id="Lose" class="button calcBtn" value ="1"onclick="ActivitySelect(this)">
+                                <i class="fas fa-walking calculatorIcon"></i>
+                                <br />
+                                <span>Lightly Active</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <button id="Lose" class="button calcBtn" onclick="ActivitySelect(this)" value=2>
+                                <i class="fas fa-running calculatorIcon"></i>
+                                <br />
+                                <span>Moderatly Active</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <button id="Lose" class="button calcBtn" onclick="ActivitySelect(this)" value="3">
+                                <i class="fas fa-snowboarding calculatorIcon"></i>
+                                <br />
+                                <span>Very Active</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 alert alert-danger centered" hidden id="Warning">
+                    <p id="WarningTxt">text</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button green" onclick="CalcMacros()" style="font-size:2em;">Calculate</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row" id="body" style="opacity:0">
         <div class="row PlannerHeaderRow">
             <div class="PlannerHeader"><span class="feedMePrimary">Meal Planner</span>&nbsp&nbsp<span>@Model.Month @Model.Year</span></div>
@@ -397,4 +629,6 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="firstTime" value="@Model.FirstTime" />
+
 }

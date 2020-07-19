@@ -19,8 +19,13 @@
     opacity: 1;
     transition: opacity .5s linear;
 }
-
-
+.calculatorIcon {
+    font-size: 60px!important;
+    padding-bottom:5px !important;
+}
+.calcBtn{
+    width:14em;
+}
 .vertical-center {
     display: flex;
     align-items: center;
