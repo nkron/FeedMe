@@ -19,15 +19,11 @@ namespace FeedMe.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "I MADE THIS";
-
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "it is me";
-
             return View();
         }
 
