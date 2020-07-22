@@ -24,9 +24,9 @@ namespace FeedMe.Services
             return _FoodRepo.GetMealFoods(MealID);
         }
 
-        public async Task<IEnumerable<Food>> Search(string searchName, MealType searchType, int calsMin, int calsMax)
+        public async Task<IEnumerable<Food>> Search(string searchName, string brand, int calsMin, int calsMax)
         {
-            return await _FoodRepo.Search(searchName, searchType, calsMin, calsMax);
+            return await _FoodRepo.Search(searchName, brand, calsMin, calsMax);
         }
 
         public void AddFoodToExistingMeal(int foodID, int mealID, string APIFoodID)

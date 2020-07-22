@@ -26,6 +26,18 @@
 .calcBtn{
     width:14em;
 }
+.calResult{
+    font-size:35px;
+}
+.macroResult {
+    font-size: 25px;
+}
+.bold{
+    font-weight:600;
+}
+.helpTxt{
+    font-size:11px;
+}
 .vertical-center {
     display: flex;
     align-items: center;
@@ -98,3 +110,14 @@ font-size:16px;
         color: red;
         transition: color .1s linear;
     }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}

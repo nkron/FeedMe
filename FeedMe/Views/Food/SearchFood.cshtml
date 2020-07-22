@@ -5,13 +5,20 @@
 
 {
     <head>
-        <link href="~/lib/Slider/nouislider.css" rel="stylesheet" />
+        <style>
+            .sliderTxt{
+                width:70px;
+            }
+            .sliderGroup{
+                margin:0 15px;
+            }
+        </style>
     </head>
     <h1>Add Food to @Model.Date</h1>
     <form>
         <div class="card col-lg-8 col-lg-offset-2" style="padding:15px;">
             <h2>Food Search</h2>
-            <div class="card-body">
+            <div style="margin-bottom:20px;">
                 <div class="row" style="padding-left:20px" ;>
                     <div class="row">
                         <div class="col-lg-2">
@@ -22,79 +29,90 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.CalsMin)
-                                <div class="customSlider Cals" id="CalSlider"></div>
-                                @Html.TextBoxFor(model => model.CalsMin, new { htmlAttributes = new { id = "CalsMin" } })
-                                @Html.TextBoxFor(model => model.CalsMax, new { htmlAttributes = new { id = "CalsMax" } })
+                                @Html.LabelFor(model => model.Brand)<br />
+                                @Html.TextBoxFor(model => model.Brand)
                             </div>
                         </div>
-                        <div class="col-lg-1">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.MealType)
-                                <div class="row">
-                                    @Html.DropDownListFor(m => m.MealType, Model.GetTypes(), null, new { htmlAttributes = new { id = "TypeDropDown" } })
-                                </div>
+                        <div class="col-lg-3">
+                            <div class="form-group sliderGroup">
+                                @Html.LabelFor(model => model.CalsMin)
+                                <div class="customSlider Cals" id="CalSlider"></div>
+                                <input asp-for="CalsMin" type="number" id="CalsMin" class="sliderTxt" />
+                                <div class="pull-right">
+                                    <input asp-for="CalsMax" type="number" id="CalsMax" class="sliderTxt" />
+                                </div>                               
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-2">
+                    <div class="row" style="margin-top:15px;">
+                        <div class="col-lg-3 sliderGroup">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.MacCMin)
                                 <div class="customSlider MacC" id="MacCSlider"></div>
-                                @Html.TextBoxFor(model => model.MacCMin, new { htmlAttributes = new { id = "MacCMin" } })
-                                @Html.TextBoxFor(model => model.MacCMax, new { htmlAttributes = new { id = "MacCMax" } })
+                                <input asp-for="MacCMin" type="number" id="MacCMin" class="sliderTxt" />
+                                <div class="pull-right">
+                                    <input asp-for="MacCMax" type="number" id="MacCMax" class="sliderTxt" />
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-3 sliderGroup">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.MacPMin)
                                 <div class="customSlider MacP" id="MacPSlider"></div>
-                                @Html.TextBoxFor(model => model.MacPMin, new { htmlAttributes = new { id = "MacPMin" } })
-                                @Html.TextBoxFor(model => model.MacPMax, new { htmlAttributes = new { id = "MacPMax" } })
+                                <input asp-for="MacPMin" type="number" id="MacPMin" class="sliderTxt" />
+                                <div class="pull-right">
+                                    <input asp-for="MacPMax" type="number" id="MacPMax" class="sliderTxt" />
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-3 sliderGroup">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.MacFMin)
                                 <div class="customSlider MacF" id="MacFSlider"></div>
-                                @Html.TextBoxFor(model => model.MacFMin, new { htmlAttributes = new { id = "MacFMin" } })
-                                @Html.TextBoxFor(model => model.MacFMax, new { htmlAttributes = new { id = "MacFMax" } })
+                                <input asp-for="MacFMin" type="number" id="MacFMin" class="sliderTxt" />
+                                <div class="pull-right">
+                                    <input asp-for="MacFMax" type="number" id="MacFMax" class="sliderTxt" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-lg-12">
                         <button type="submit" class="button blue">Search</button>
                         &nbsp;
                         <button class="button" asp-controller="Food" asp-action="SearchClear">Clear</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
-                <table class="table table-hover">
-                    <tr>
-                        <th></th>
-                        <th>
-                            Food Name
-                        </th>
-                        <th>
-                            Calories
-                        </th>
-                        <th class="MacC">
-                            Carbs
-                        </th>
-                        <th class="MacP">
-                            Protein
-                        <th class="MacF">
-                            Fat
-                        </th>
-                        <th>
-                        </th>
-                    </tr>
+                <table id="myTable" class="table table-condensed table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                Food Name
+                            </th>
+                            <th>
+                                Brand
+                            </th>
+                            <th>
+                                Calories
+                            </th>
+                            <th class="MacC">
+                                Carbs
+                            </th>
+                            <th class="MacP">
+                                Protein
+                            <th class="MacF">
+                                Fat
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
                     <tbody>
                         @foreach (var item in Model.Results)
                         {
@@ -102,6 +120,9 @@
                                 <td style="width:100px;"><img style="width:75px;" src=@item.ImageURL></td>
                                 <td>
                                     @item.FoodName
+                                </td>
+                                <td>
+                                    @item.Brand
                                 </td>
                                 <td>
                                     @item.Cals
@@ -130,128 +151,136 @@
         </div>
     </form>
 }
-    <script src="~/lib/Slider/nouislider.js"></script>
-    <script src="~/lib/Slider/wNumb.js"></script>
-    <script>
-        function AddToMeal(id) {
-            $.ajax({
-                url: 'Food/AddToMeal',
-                data: { foodID: id }
-            }).done(function () {
-                alert('Added');
-            });
-        }
-        //Calorie Slider
-        noUiSlider.create(CalSlider, {
-            start: [document.getElementById("CalsMin").value, document.getElementById("CalsMax").value],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 0,
-                'max': 4000
-            },
-            format: wNumb({
-                decimals: 0
-            })
-        });
 
-        CalSlider.noUiSlider.on('update', function (values, handle) {
-            var min = values[0];
-            var max = values[1];
-            $("#CalsMax").val(max);
-            $("#CalsMin").val(min);
+<link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+<script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+<link href="~/lib/Slider/nouislider.css" rel="stylesheet" />
+<script src="~/lib/Slider/nouislider.js"></script>
+<script src="~/lib/Slider/wNumb.js"></script>
+<script>
+    $(document).ready(function () {
+        $.noConflict();
+        $('#myTable').DataTable();
+    });
+    function AddToMeal(id) {
+        $.ajax({
+            url: 'Food/AddToMeal',
+            data: { foodID: id }
+        }).done(function () {
+            alert('Added');
         });
+    }
+    //Calorie Slider
+    noUiSlider.create(CalSlider, {
+        start: [document.getElementById("CalsMin").value, document.getElementById("CalsMax").value],
+        connect: true,
+        step: 1,
+        range: {
+            'min': 0,
+            'max': 4000
+        },
+        format: wNumb({
+            decimals: 0
+        })
+    });
 
-        $("#CalsMin").on('change', function () {
-            CalSlider.noUiSlider.set([$("#CalsMin").val(), null]);
-        });
-        $("#CalsMax").on('change', function () {
-            CalSlider.noUiSlider.set([null,$("#CalsMax").val()]);
-        });
-        //Carbs Slider
-        noUiSlider.create(MacCSlider, {
-            start: [document.getElementById("MacCMin").value, document.getElementById("MacCMax").value],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 0,
-                'max': 300
-            },
-            format: wNumb({
-                decimals: 0
-            })
-        });
+    CalSlider.noUiSlider.on('update', function (values, handle) {
+        var min = values[0];
+        var max = values[1];
+        $("#CalsMax").val(max);
+        $("#CalsMin").val(min);
+    });
 
-        MacCSlider.noUiSlider.on('update', function (values, handle) {
-            var min = values[0];
-            var max = values[1];
-            $("#MacCMax").val(max);
-            $("#MacCMin").val(min);
+    $("#CalsMin").on('change', function () {
+        CalSlider.noUiSlider.set([$("#CalsMin").val(), null]);
+    });
+    $("#CalsMax").on('change', function () {
+        CalSlider.noUiSlider.set([null, $("#CalsMax").val()]);
+    });
+    //Carbs Slider
+    noUiSlider.create(MacCSlider, {
+        start: [document.getElementById("MacCMin").value, document.getElementById("MacCMax").value],
+        connect: true,
+        step: 1,
+        range: {
+            'min': 0,
+            'max': 300
+        },
+        format: wNumb({
+            decimals: 0
+        })
+    });
 
-        });
+    MacCSlider.noUiSlider.on('update', function (values, handle) {
+        var min = values[0];
+        var max = values[1];
+        $("#MacCMax").val(max);
+        $("#MacCMin").val(min);
 
-        $("#MacCMin").on('change', function () {
-            MacCSlider.noUiSlider.set([$("#MacCMin").val(), null]);
-        });
-        $("#MacCMax").on('change', function () {
-            MacCSlider.noUiSlider.set([null, $("#MacCMax").val()]);
-        });
-        //Fat Slider
-        noUiSlider.create(MacFSlider, {
-            start: [document.getElementById("MacFMin").value, document.getElementById("MacFMax").value],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 0,
-                'max': 300
-            },
-            format: wNumb({
-                decimals: 0
-            })
-        });
+    });
 
-        MacFSlider.noUiSlider.on('update', function (values, handle) {
-            var min = values[0];
-            var max = values[1];
-            $("#MacFMax").val(max);
-            $("#MacFMin").val(min);
+    $("#MacCMin").on('change', function () {
+        MacCSlider.noUiSlider.set([$("#MacCMin").val(), null]);
+    });
+    $("#MacCMax").on('change', function () {
+        MacCSlider.noUiSlider.set([null, $("#MacCMax").val()]);
+    });
+    //Fat Slider
+    noUiSlider.create(MacFSlider, {
+        start: [document.getElementById("MacFMin").value, document.getElementById("MacFMax").value],
+        connect: true,
+        step: 1,
+        range: {
+            'min': 0,
+            'max': 300
+        },
+        format: wNumb({
+            decimals: 0
+        })
+    });
 
-        });
+    MacFSlider.noUiSlider.on('update', function (values, handle) {
+        var min = values[0];
+        var max = values[1];
+        $("#MacFMax").val(max);
+        $("#MacFMin").val(min);
 
-        $("#MacFMin").on('change', function () {
-            MacFSlider.noUiSlider.set([$("#MacFMin").val(), null]);
-        });
-        $("#MacFMax").on('change', function () {
-            MacFSlider.noUiSlider.set([null, $("#MacFMax").val()]);
-        });
-        //Protein Slider
-        noUiSlider.create(MacPSlider, {
-            start: [document.getElementById("MacPMin").value, document.getElementById("MacPMax").value],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 0,
-                'max': 300
-            },
-            format: wNumb({
-                decimals: 0
-            })
-        });
+    });
 
-        MacPSlider.noUiSlider.on('update', function (values, handle) {
-            var min = values[0];
-            var max = values[1];
-            $("#MacPMax").val(max);
-            $("#MacPMin").val(min);
+    $("#MacFMin").on('change', function () {
+        MacFSlider.noUiSlider.set([$("#MacFMin").val(), null]);
+    });
+    $("#MacFMax").on('change', function () {
+        MacFSlider.noUiSlider.set([null, $("#MacFMax").val()]);
+    });
+    //Protein Slider
+    noUiSlider.create(MacPSlider, {
+        start: [document.getElementById("MacPMin").value, document.getElementById("MacPMax").value],
+        connect: true,
+        step: 1,
+        range: {
+            'min': 0,
+            'max': 300
+        },
+        format: wNumb({
+            decimals: 0
+        })
+    });
 
-        });
+    MacPSlider.noUiSlider.on('update', function (values, handle) {
+        var min = values[0];
+        var max = values[1];
+        $("#MacPMax").val(max);
+        $("#MacPMin").val(min);
 
-        $("#MacPMin").on('change', function () {
-            MacPSlider.noUiSlider.set([$("#MacPMin").val(), null]);
-        });
-        $("#MacPMax").on('change', function () {
-            MacPSlider.noUiSlider.set([null, $("#MacPMax").val()]);
-        });
-    </script>
+    });
+
+    $("#MacPMin").on('change', function () {
+        MacPSlider.noUiSlider.set([$("#MacPMin").val(), null]);
+    });
+    $("#MacPMax").on('change', function () {
+        MacPSlider.noUiSlider.set([null, $("#MacPMax").val()]);
+    });
+</script>
 
 

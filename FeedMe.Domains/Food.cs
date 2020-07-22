@@ -13,8 +13,8 @@ namespace FeedMe.Domains
         {
             FoodID = 0;
             APIFoodID = f.foodId;
-            string s = f.label;
-            FoodName = s;
+            FoodName = f.label;
+            Brand = f.brand;
             MacC = Convert.ToInt32(f.nutrients.CHOCDF);
             MacP = Convert.ToInt32(f.nutrients.PROCNT);
             MacF = Convert.ToInt32(f.nutrients.FAT);
@@ -58,6 +58,8 @@ namespace FeedMe.Domains
 
         [Column("FoodName")]
         public string FoodName { get; set; }
+        [Column("Brand")]
+        public string Brand { get; set; }
         [Column("FoodDesc")]
         public string FoodDesc { get; set; }
 

@@ -41,12 +41,12 @@ namespace FeedMe.Models
         [HiddenInput]
         public string APIFoodID { get; set; }
         [Required]
-        [Display(Name = "Food Name ")]
+        [Display(Name = "Food Name")]
         public string FoodName{ get; set; }
-        
-        [Display(Name = "Food Description ")]
+        [Display(Name = "Food Desc")]
         public string FoodDesc { get; set; }
-
+        [Display(Name = "Brand")]
+        public string Brand { get; set; }
         [Display(Name = "Carbs(g)")]
         [Range(0,10000)]
         public int? MacC { get; set; }
@@ -80,6 +80,7 @@ namespace FeedMe.Models
         {
             //Load food data into local vars
             FoodID = f.FoodID;
+            Brand = f.Brand;
             APIFoodID = f.APIFoodID;
             FoodName = f.FoodName;
             MacC = f.MacC;

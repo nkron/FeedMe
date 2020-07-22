@@ -32,9 +32,10 @@ namespace FeedMe.Controllers
             MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, DateTime.Today);
             return View(model);
         }
-        public IActionResult FirstTime()
-        {           
-            MealPlannerViewModel model = new MealPlannerViewModel();
+        public async Task<IActionResult> FirstTime()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, DateTime.Today);
             model.FirstTime = true;
             return View(model);
         }

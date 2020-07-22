@@ -24,7 +24,7 @@ namespace FeedMe.Models
         public int targetMacCTotal { get; set; }
         public int targetMacPTotal { get; set; }
         public int targetMacFTotal { get; set; }
-        public String Date{get; set;}
+        public String Date { get; set; }
         public String Month { get; set; }
         public String Year { get; set; }
         public String Day { get; set; }
@@ -42,7 +42,7 @@ namespace FeedMe.Models
 
             //Put each meal in a mealviewmodel
 
-            var m = _mealService.getUserMealsByDate(user.UserID,d);
+            var m = _mealService.getUserMealsByDate(user.UserID, d);
             meals = new List<MealDetailsViewModel>();
             foreach (Meal i in m)
             {
@@ -58,9 +58,10 @@ namespace FeedMe.Models
             targetMacP = user.TargetMacP;
             targetMacC = user.TargetMacC;
 
-            targetMacCTotal = Convert.ToInt32(targetCals * (targetMacC * .01));
-            targetMacFTotal = Convert.ToInt32(targetCals * (targetMacF * .01));
-            targetMacPTotal = Convert.ToInt32(targetCals * (targetMacP*.01));
+            targetMacCTotal = Convert.ToInt32(targetCals * (targetMacC * .01)) / 4;
+            targetMacPTotal = Convert.ToInt32(targetCals * (targetMacP * .01)) / 9;
+            targetMacFTotal = Convert.ToInt32(targetCals * (targetMacF * .01)) / 4;
+            
 
             Date = d.ToShortDateString();
 

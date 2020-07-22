@@ -27,6 +27,8 @@ namespace FeedMe.Models
         public string Date { get; set; }
         [Display(Name = "Name")]
         public string SearchName { get; set; }
+        [Display(Name = "Brand")]
+        public string Brand { get; set; }
         [Display(Name = "Calories")]
         public int CalsMin { get; set; }
         public int CalsMax { get; set; }

@@ -16,11 +16,11 @@ namespace FeedMe.Repositories
 
         public async static Task<List<Food>> SearchFood(string foodName)
         {
-            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a";
+            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a&category=packaged-foods";
             if (foodName == null)
             {
                 //requires a value and dont know what else to do for default
-                Uri += "&ingr=a";
+                Uri += "&ingr=trader joes";
             }
             else
             {

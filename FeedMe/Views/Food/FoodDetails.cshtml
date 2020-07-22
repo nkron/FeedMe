@@ -153,7 +153,7 @@
         var cals = document.getElementById("Cals").value;
         var MacCg = Math.trunc(((MacC * .01) * cals) / 4);
         var MacPg = Math.trunc(((MacP * .01) * cals) / 4);
-        var MacFg = Math.trunc(((MacF * .01) * cals) / 7);
+        var MacFg = Math.trunc(((MacF * .01) * cals) / 9);
 
         $("#MacC").val(MacCg);
         $("#MacP").val(MacPg);
@@ -167,7 +167,7 @@
         var cals = document.getElementById("Cals").value;
         var MacCg = Math.round((($("#MacC").val() / .01) / cals) * 4);
         var MacPg = Math.round((($("#MacP").val() / .01) / cals) * 4);
-        var MacFg = Math.round((($("#MacF").val() / .01) / cals) * 7);
+        var MacFg = Math.round((($("#MacF").val() / .01) / cals) * 9);
 
         MacroSlider.noUiSlider.set([MacCg, 100 - Number(MacFg)]);
 
@@ -194,28 +194,6 @@
         for (var i = 0; i < connect.length; i++) {
             connect[i].classList.add(classes[i]);
         }
-    }
-    function createFood() {
-        //$.ajax({
-        //    type: "POST",
-        //    url: '/Food/Save',
-        //    data: $('Form').serialize(),   //your form name.it takes all the values of model
-        //    dataType: 'json',
-        //    success: function (result) {
-        //        console.log(result);
-        //    }
-        //})
-    }
-    function saveFood() {
-        //$.ajax({
-        //    type: "POST",
-        //    url: '/Food/Save',
-        //    data: $('Form').serialize(),   //your form name.it takes all the values of model
-        //    dataType: 'json',
-        //    success: function (result) {
-        //        console.log(result);
-        //    }
-        //})
     }
 
     var actualCals;

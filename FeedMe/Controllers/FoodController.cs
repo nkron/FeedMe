@@ -61,17 +61,22 @@ namespace FeedMe.Web.Controllers
         private async Task<List<FoodViewModel>> ExecuteSearch(FoodSearchViewModel VM)
         {
             VM.Results.Clear();
-            List<Food> results = (List<Food>)await _foodService.Search(VM.SearchName, VM.MealType, VM.CalsMin, VM.CalsMax);
 
-            foreach (Food f in results)
+            List<Food> localFoods = (List<Food>)await _foodService.Search(VM.SearchName, VM.Brand, VM.CalsMin, VM.CalsMax);
+            List<FoodViewModel> APIFoods = ExecuteAPISearch(VM).Result;
+            List<FoodViewModel> results = new List<FoodViewModel>();
+
+            foreach (Food f in localFoods)
             {
-                VM.Results.Add(new FoodViewModel(f));
+                results.Add(new FoodViewModel(f));
+            }            
+            foreach(FoodViewModel f in APIFoods.ToList())
+            {
+                results.Add(f);
             }
 
-            VM.Results.AddRange((List<FoodViewModel>)ExecuteAPISearch(VM).Result);
-
-            VM.Date = HttpContext.Session.GetString("SearchMealDate");
-            return VM.Results;
+            VM.Date = HttpContext.Session.GetString("MealDate");
+            return results;
         }
 
         private async Task<List<FoodViewModel>> ExecuteAPISearch(FoodSearchViewModel VM)

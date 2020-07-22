@@ -154,17 +154,14 @@ namespace FeedMe.Repositories
             }
         }
 
-        public async Task<IEnumerable<Food>> Search(string searchName, MealType? searchType, int CalsMin, int CalsMax)
+        public async Task<IEnumerable<Food>> Search(string searchName, string brand, int CalsMin, int CalsMax)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
                 
                 var param = new DynamicParameters();
                 param.Add("@FoodName", "%" + searchName + "%", DbType.String);
-
-                if (searchType == 0)
-                    searchType = null;
-                param.Add("@FoodType", searchType, DbType.Int32);
+                param.Add("@Brand", brand, DbType.String);
                 param.Add("@CalsMin", CalsMin, DbType.Int32);
                 param.Add("@CalsMax", CalsMax, DbType.Int32);
                 await connection.OpenAsync();
