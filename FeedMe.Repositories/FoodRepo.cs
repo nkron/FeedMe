@@ -132,7 +132,7 @@ namespace FeedMe.Repositories
                 return;
             }
         }
-        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
+        public int CreateFood(string foodName, string foodDesc, string brand, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -141,6 +141,7 @@ namespace FeedMe.Repositories
                 var param = new DynamicParameters();
                 param.Add("@FoodName", foodName, DbType.String);
                 param.Add("@FoodDesc", foodDesc, DbType.String);
+                param.Add("@Brand", brand, DbType.String);
                 param.Add("@Cals", cals, DbType.Int32);
                 param.Add("@MacC", macC, DbType.Int32);
                 param.Add("@MacP", macP, DbType.Int32);

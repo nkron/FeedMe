@@ -48,9 +48,9 @@ namespace FeedMe.Services
         {
             _FoodRepo.UpdateFood(foodName, foodDesc, cals, macC, macF, macP, foodID);
         }
-        public int CreateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
+        public int CreateFood(string foodName, string foodDesc, string brand, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
         {
-            return _FoodRepo.CreateFood(foodName, foodDesc, cals, macC, macF, macP, creatorID,APIFoodID,ImageURL);
+            return _FoodRepo.CreateFood(foodName, foodDesc, brand, cals, macC, macF, macP, creatorID,APIFoodID,ImageURL);
         }
         public int GetAPIFoodInLocal(string apiFoodID)
         {

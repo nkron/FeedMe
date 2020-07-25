@@ -41,9 +41,9 @@ namespace FeedMe.Models
         [HiddenInput]
         public string APIFoodID { get; set; }
         [Required]
-        [Display(Name = "Food Name")]
+        [Display(Name = "Name")]
         public string FoodName{ get; set; }
-        [Display(Name = "Food Desc")]
+        [Display(Name = "Description")]
         public string FoodDesc { get; set; }
         [Display(Name = "Brand")]
         public string Brand { get; set; }

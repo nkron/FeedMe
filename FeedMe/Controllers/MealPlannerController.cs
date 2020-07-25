@@ -37,7 +37,7 @@ namespace FeedMe.Controllers
             var user = await _userManager.GetUserAsync(User);
             MealPlannerViewModel model = new MealPlannerViewModel(_mealService, _foodService, user, DateTime.Today);
             model.FirstTime = true;
-            return View(model);
+            return View("Index", model);
         }
         public async Task<IActionResult> GoToDate(string date)
         {

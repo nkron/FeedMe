@@ -38,7 +38,7 @@ namespace FeedMe.Models
         public MealPlannerViewModel(MealService mealService, FoodService _foodService, User user, DateTime d)
         {
             _mealService = mealService;
-
+            FirstTime = false;
             //Put each meal in a mealviewmodel
 
             var m = _mealService.getUserMealsByDate(user.UserID, d);

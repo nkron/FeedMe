@@ -195,15 +195,15 @@ namespace FeedMe.Web.Controllers
 
         private int CreateFood(FoodDetailsViewModel vm)
         {
-            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
+            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Brand, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
         }
         private int CreateFood(FoodViewModel vm)
         {
-            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
+            return _foodService.CreateFood(vm.FoodName, vm.FoodDesc, vm.Brand, vm.Cals, vm.MacC, vm.MacF, vm.MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), vm.APIFoodID, vm.ImageURL);
         }
-        private int CreateFood(string FoodName, string FoodDesc, int Cals, int MacC, int MacF, int MacP, string APIFoodID, string ImageURL)
+        private int CreateFood(string FoodName, string FoodDesc, string brand, int Cals, int MacC, int MacF, int MacP, string APIFoodID, string ImageURL)
         {
-            return _foodService.CreateFood(FoodName, FoodDesc, Cals, MacC, MacF, MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), APIFoodID, ImageURL);
+            return _foodService.CreateFood(FoodName, FoodDesc, brand, Cals, MacC, MacF, MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), APIFoodID, ImageURL);
         }
         private void CreateForMeal(FoodDetailsViewModel vm)
         {
@@ -212,7 +212,7 @@ namespace FeedMe.Web.Controllers
             //meal id twice?
             _foodService.RemoveFoodFromMeal(HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetString("FoodID"));
         }
-        public IActionResult AddToMeal(int FoodID, string APIFoodID, int Cals, int MacC, int MacF, int MacP, string FoodName, string ImageURL)
+        public IActionResult AddToMeal(int FoodID, string APIFoodID, string brand, int Cals, int MacC, int MacF, int MacP, string FoodName, string ImageURL)
         {
             int foodID = FoodID;
             //Create API food in db if local version doesn't already exist
@@ -221,7 +221,7 @@ namespace FeedMe.Web.Controllers
                 int f = _foodService.GetAPIFoodInLocal(APIFoodID);
                 if (f == 0)
                 {
-                    foodID = CreateFood(FoodName, null, Cals, MacC, MacF, MacP, APIFoodID, ImageURL);
+                    foodID = CreateFood(FoodName, null, brand, Cals, MacC, MacF, MacP, APIFoodID, ImageURL);
                 }
 
                 else

@@ -18,6 +18,10 @@
                             <label asp-for="FoodName"></label>
                             <input asp-for="FoodName" class="form-control" disabled />
                         </div>
+                        <div class="form-group col-lg-4" style="margin-left:15px;">
+                            <label asp-for="Brand"></label>
+                            <input asp-for="Brand" class="form-control" disabled />
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-10">
@@ -27,29 +31,31 @@
                     </div>
                     <h2 class="card-header">Serving Details</h2>
                     <div class="row">
-                        <div class="form-group col-lg-2">
+                        <div class="form-group col-lg-3">
                             <label asp-for="Cals"></label>
-                            <input asp-for="Cals" id="Cals" min="0" inputmode="numeric" type="number" class="form-control" onchange="checkCalories();" disabled />
+                            <input asp-for="Cals" id="Cals" min="0" inputmode="numeric" type="number" class="form-control" style="width:75%" onchange="checkCalories();" disabled />
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-5 col-md-5">
+                        <div class="col-lg-7 col-md-7">
                             <div id="MacroSlider"></div>
                         </div>
                     </div>
                     <div class="row" style="margin-top:15px;">
 
-                        <div class="col-lg-2 col-md-1 form-group">
+                        <div class="col-lg-3 col-md-3 form-group">
                             <label asp-for="MacC" class="MacC"></label>
-                            <input asp-for="MacC" id="MacC" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders();checkCalories();" />
+                            <input asp-for="MacC" id="MacC" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders();checkCalories();" />
                         </div>
-                        <div class="col-lg-2 col-md-1 form-group">
+                        &nbsp;
+                        <div class="col-lg-3 col-md-3 form-group">
                             <label asp-for="MacP" class="MacP"></label>
-                            <input asp-for="MacP" id="MacP" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders(); checkCalories();" />
+                            <input asp-for="MacP" id="MacP" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders(); checkCalories();" />
                         </div>
-                        <div class="col-lg-2 col-md-1 form-group">
+                        &nbsp;
+                        <div class="col-lg-3 col-md-3 form-group">
                             <label asp-for="MacF" class="MacF"></label>
-                            <input asp-for="MacF" id="MacF" class="form-control" inputmode="numeric" type="number" min="0" disabled onchange="setSliders(); checkCalories();" />
+                            <input asp-for="MacF" id="MacF" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders(); checkCalories();" />
                         </div>
                     </div>
                     <div class="col-lg-12 alert alert-danger centered hidden" id="CalWarning">

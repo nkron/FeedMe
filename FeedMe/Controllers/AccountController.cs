@@ -44,7 +44,7 @@ namespace FeedMe.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "MealPlanner");
+                    return RedirectToAction("FirstTime", "MealPlanner");
                 }
                 AddErrors(result);
             }
