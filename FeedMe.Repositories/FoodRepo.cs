@@ -48,6 +48,7 @@ namespace FeedMe.Repositories
 
             return list;
         }
+
         //Returns 0 if API food isn't associated with a food in DB
         public int GetAPIFoodInLocal(string @APIFoodId)
         {
@@ -154,7 +155,7 @@ namespace FeedMe.Repositories
             }
         }
 
-        public async Task<IEnumerable<Food>> Search(string searchName, string brand, int CalsMin, int CalsMax)
+        public async Task<IEnumerable<Food>> Search(string searchName, string brand, int calsMin, int calsMax, int macCMin, int macCMax, int macPMin, int macPMax, int macFMin, int macFMax)
         {
             using (var connection = new System.Data.SqlClient.SqlConnection(Helper.CnnValue("FeedMeDB")))
             {
@@ -162,8 +163,14 @@ namespace FeedMe.Repositories
                 var param = new DynamicParameters();
                 param.Add("@FoodName", "%" + searchName + "%", DbType.String);
                 param.Add("@Brand", brand, DbType.String);
-                param.Add("@CalsMin", CalsMin, DbType.Int32);
-                param.Add("@CalsMax", CalsMax, DbType.Int32);
+                param.Add("@CalsMin", calsMin, DbType.Int32);
+                param.Add("@CalsMax", calsMax, DbType.Int32);
+                param.Add("@MacCMin", macCMin, DbType.Int32);
+                param.Add("@MacCMax", macCMax, DbType.Int32);
+                param.Add("@MacPMin", macPMin, DbType.Int32);
+                param.Add("@MacPMax", macPMax, DbType.Int32);
+                param.Add("@MacFMin", macFMin, DbType.Int32);
+                param.Add("@MacFMax", macFMax, DbType.Int32);
                 await connection.OpenAsync();
                 var i =  await connection.QueryAsync<Food>(
                     "dbo.SearchFood",

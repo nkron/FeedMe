@@ -61,18 +61,20 @@ namespace FeedMe.Web.Controllers
         private async Task<List<FoodViewModel>> ExecuteSearch(FoodSearchViewModel VM)
         {
             VM.Results.Clear();
-
-            List<Food> localFoods = (List<Food>)await _foodService.Search(VM.SearchName, VM.Brand, VM.CalsMin, VM.CalsMax);
-            List<FoodViewModel> APIFoods = ExecuteAPISearch(VM).Result;
             List<FoodViewModel> results = new List<FoodViewModel>();
 
+            List<Food> localFoods = (List<Food>)await _foodService.Search(VM.SearchName, VM.Brand, VM.CalsMin, VM.CalsMax, VM.MacCMin, VM.MacCMax, VM.MacPMin, VM.MacPMax, VM.MacFMin, VM.MacFMax);
             foreach (Food f in localFoods)
             {
                 results.Add(new FoodViewModel(f));
-            }            
-            foreach(FoodViewModel f in APIFoods.ToList())
+            }
+
+            List<FoodViewModel> APIFoods = ExecuteAPISearch(VM).Result;
+            foreach (FoodViewModel f in APIFoods.ToList())
             {
-                results.Add(f);
+                //Refine search by ranges because API doesn't offer feature
+                if (f.Cals > VM.CalsMin && f.Cals < VM.CalsMax && f.MacC > VM.MacCMin && f.MacC < VM.MacCMax && f.MacP > VM.MacPMin && f.MacP < VM.MacPMax && f.MacP > VM.MacPMin && f.MacP < VM.MacPMax)
+                    results.Add(f);
             }
 
             VM.Date = HttpContext.Session.GetString("MealDate");
@@ -113,7 +115,7 @@ namespace FeedMe.Web.Controllers
         //}
         public IActionResult FoodDetailsForMealSearch(int foodID, string apiID, string imageURL)
         {
-            return FoodDetails(foodID, HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetString("MealDate"),apiID,imageURL);
+            return FoodDetails(foodID, HttpContext.Session.GetInt32("MealID").Value, HttpContext.Session.GetString("MealDate"), apiID, imageURL);
         }
 
         public IActionResult FoodDetailsForMeal(int foodID, int mealID, string date)
@@ -121,9 +123,9 @@ namespace FeedMe.Web.Controllers
             HttpContext.Session.SetString("MealDate", date);
             HttpContext.Session.SetInt32("MealID", mealID);
             HttpContext.Session.SetInt32("FoodID", foodID);
-            return FoodDetails(foodID, mealID, date,null,null);
+            return FoodDetails(foodID, mealID, date, null, null);
         }
-        public IActionResult FoodDetails(int foodID, int mealID, string date,string apiID,string imageURL)
+        public IActionResult FoodDetails(int foodID, int mealID, string date, string apiID, string imageURL)
         {
             Food f;
             FoodDetailsViewModel vm;
@@ -135,7 +137,7 @@ namespace FeedMe.Web.Controllers
             //    vm.ImageURL = imageURL;
             //}
             f = _foodService.getByID(Convert.ToInt32(foodID));
-                vm = new FoodDetailsViewModel(f);
+            vm = new FoodDetailsViewModel(f);
 
             if (vm.CreatorID.ToString().Equals(_userManager.GetUserId(User)))
             {

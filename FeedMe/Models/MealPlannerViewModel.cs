@@ -11,7 +11,6 @@ namespace FeedMe.Models
     public class MealPlannerViewModel
     {
         MealService _mealService;
-        MealService _foodService;
 
         public int totalCals { get; set; }
         public int totalMacC { get; set; }

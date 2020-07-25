@@ -6,11 +6,19 @@
 {
     <head>
         <style>
-            .sliderTxt{
-                width:70px;
+            .sliderTxt {
+                width: 70px;
             }
-            .sliderGroup{
-                margin:0 15px;
+
+            .sliderGroup {
+                margin: 0 15px;
+            }
+
+            .vertical-align {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
             }
         </style>
     </head>
@@ -40,7 +48,7 @@
                                 <input asp-for="CalsMin" type="number" id="CalsMin" class="sliderTxt" />
                                 <div class="pull-right">
                                     <input asp-for="CalsMax" type="number" id="CalsMax" class="sliderTxt" />
-                                </div>                               
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -88,7 +96,7 @@
             </div>
 
             <div class="form-group">
-                <table id="myTable" class="table table-condensed table-hover table-striped">
+                <table id="myTable" class="table table-condensed table-hover table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th></th>
@@ -136,11 +144,9 @@
                                 <td class="MacF">
                                     @item.MacF
                                 </td>
-                                <td>
-                                    @*add button and/or click on row *@
-                                    @*@Html.ActionLink("Add", "AddToMeal", "Food", new { vm = item }, null)*@
+                                <td class="align-middle">
                                     <a asp-controller="Food" asp-action="AddToMeal" asp-route-foodID=@item.FoodID asp-route-APIFoodID=@item.APIFoodID asp-route-FoodName="@item.FoodName" asp-route-Cals=@item.Cals asp-route-MacC=@item.MacC asp-route-MacP=@item.MacP asp-route-MacF=@item.MacF asp-route-ImageUrl=@item.ImageURL>
-                                        Add
+                                        <i class="fas fa-plus-circle feedMeSecondary" style="font-size:30px;" data-toggle="tooltip" data-placement="bottom" title="Add to meal"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -158,6 +164,9 @@
 <script src="~/lib/Slider/nouislider.js"></script>
 <script src="~/lib/Slider/wNumb.js"></script>
 <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     $(document).ready(function () {
         $.noConflict();
         $('#myTable').DataTable();
