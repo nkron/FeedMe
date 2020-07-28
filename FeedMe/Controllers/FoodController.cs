@@ -152,6 +152,16 @@ namespace FeedMe.Web.Controllers
 
             return View("FoodDetails", vm);
         }
+        public IActionResult CreateCustomFood(int mealID, string date)
+        {
+            FoodDetailsViewModel vm = new FoodDetailsViewModel();
+
+            vm.SubmitType = (SubmitType)1;
+            ViewBag.Mode = "create";
+            ViewBag.UserID = _userManager.GetUserId(User);
+
+            return View("FoodDetails", vm);
+        }
         [HttpPost]
         public IActionResult SubmitFood(FoodDetailsViewModel vm)
         {
@@ -160,19 +170,19 @@ namespace FeedMe.Web.Controllers
                 int caseSwitch = (int)vm.SubmitType;
                 switch (caseSwitch)
                 {
-                    //Create
+                    //Create for meal
                     case 1:
-                        CreateFood(vm);
-                        return View("FoodDetails", vm);
-                    //Update
+                        CreateForMeal(vm);
+                        return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
+                    //Update (unused - will be for updating food unrelated to meal planner)
                     case 2:
                         UpdateFood(vm);
                         return View("FoodDetails", vm);
-                    //CreateForMeal
+                    //Create for meal and replace old record
                     case 3:
-                        CreateForMeal(vm);
+                        CreateAndReplaceForMeal(vm);
                         return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
-                    //UpdateForMeal
+                    //Update For Meal
                     case 4:
                         UpdateFood(vm);
                         return RedirectToAction("GoToDate", "MealPlanner", new { date = HttpContext.Session.GetString("MealDate") });
@@ -190,7 +200,7 @@ namespace FeedMe.Web.Controllers
 
         private void UpdateFood(FoodDetailsViewModel vm)
         {
-            _foodService.UpdateFood(vm.FoodName, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, vm.FoodID);
+            _foodService.UpdateFood(vm.FoodName, vm.Brand, vm.FoodDesc, vm.Cals, vm.MacC, vm.MacF, vm.MacP, vm.FoodID);
         }
 
         private int CreateFood(FoodDetailsViewModel vm)
@@ -206,6 +216,18 @@ namespace FeedMe.Web.Controllers
             return _foodService.CreateFood(FoodName, FoodDesc, brand, Cals, MacC, MacF, MacP, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)), APIFoodID, ImageURL);
         }
         private void CreateForMeal(FoodDetailsViewModel vm)
+        {
+            int foodID = CreateFood(vm);
+            if (HttpContext.Session.GetInt32("MealID").Value == 0)
+            {
+                _foodService.AddFoodToNewMeal(HttpContext.Session.GetString("MealDate"), HttpContext.Session.GetInt32("MealType").Value, foodID, null, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            }
+            else
+            {
+                _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("MealID").Value, null);
+            }
+        }
+        private void CreateAndReplaceForMeal(FoodDetailsViewModel vm)
         {
             int foodID = CreateFood(vm);
             _foodService.AddFoodToExistingMeal(foodID, HttpContext.Session.GetInt32("MealID").Value, null);

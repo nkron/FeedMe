@@ -2,7 +2,7 @@
 
 <form asp-controller="Food" asp-action="SubmitFood">
     <div class="form-horizontal">
-        <div class="card col-lg-offset-4 col-lg-4" style="padding: 5px 30px;">
+        <div class="card col-lg-offset-4 col-lg-4 col-md-12 col-md-offset-0" style="padding: 5px 30px;">
             <row>
                 <div class="pull-right" style="padding-top:20px;">
                     <button type="button" id="Customize" class="button green hidden" onclick="createMode()"><i class="fas fa-edit">Customize</i></button>
@@ -12,63 +12,68 @@
 
             </row>
             <div class="card-body">
-                <div class="col">
+                <div class="col-xs-12">
                     <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label asp-for="FoodName"></label>
-                            <input asp-for="FoodName" class="form-control" disabled />
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label asp-for="FoodName"></label>
+                                <input asp-for="FoodName" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Brand"></label>
+                                <input asp-for="Brand" class="form-control" disabled />
+                            </div>
                         </div>
-                        <div class="form-group col-lg-4" style="margin-left:15px;">
-                            <label asp-for="Brand"></label>
-                            <input asp-for="Brand" class="form-control" disabled />
+                        <div class="col-xs-4 pull-right">
+                            <img style="width:170px; padding-left:20px;" src=@Model.ImageURL>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-10">
+                        <div class="form-group col-xs-10">
                             <label asp-for="FoodDesc"></label>
                             <input asp-for="FoodDesc" class="form-control" disabled />
                         </div>
                     </div>
                     <h2 class="card-header">Serving Details</h2>
                     <div class="row">
-                        <div class="form-group col-lg-3">
+                        <div class="form-group col-xs-3">
                             <label asp-for="Cals"></label>
                             <input asp-for="Cals" id="Cals" min="0" inputmode="numeric" type="number" class="form-control" style="width:75%" onchange="checkCalories();" disabled />
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-7 col-md-7">
+                        <div class="col-xs-7 col-md-7">
                             <div id="MacroSlider"></div>
                         </div>
                     </div>
                     <div class="row" style="margin-top:15px;">
 
-                        <div class="col-lg-3 col-md-3 form-group">
+                        <div class="col-xs-3 col-md-3 form-group">
                             <label asp-for="MacC" class="MacC"></label>
                             <input asp-for="MacC" id="MacC" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders();checkCalories();" />
                         </div>
                         &nbsp;
-                        <div class="col-lg-3 col-md-3 form-group">
+                        <div class="col-xs-3 col-md-3 form-group">
                             <label asp-for="MacP" class="MacP"></label>
                             <input asp-for="MacP" id="MacP" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders(); checkCalories();" />
                         </div>
                         &nbsp;
-                        <div class="col-lg-3 col-md-3 form-group">
+                        <div class="col-xs-3 col-md-3 form-group">
                             <label asp-for="MacF" class="MacF"></label>
                             <input asp-for="MacF" id="MacF" class="form-control" inputmode="numeric" type="number" min="0" style="width:75%" disabled onchange="setSliders(); checkCalories();" />
                         </div>
                     </div>
-                    <div class="col-lg-12 alert alert-danger centered hidden" id="CalWarning">
+                    <div class="col-xs-12 alert alert-danger centered hidden" id="CalWarning">
                         <div class="row">
                             The calories entered <b id="EnteredCals"></b> differ too much from the calories calculated from the macros <b id="CalculatedCals"></b>.
                         </div>
                         <div class="row">
-                            <button class="button green" onclick="AdjustCals()"><span id="CalsButton"></span></button>
-                            <button class="button green" onclick="AdjustMacros()"><span id="MacroButton"></span></button>
-                            <button class="button" onclick="IgnoreWarning()">Ignore Warning</button>
+                            <button type="button" class="button green" onclick="AdjustCals()"><span id="CalsButton"></span></button>
+                            <button type="button" class="button green" onclick="AdjustMacros()"><span id="MacroButton"></span></button>
+                            <button type="button" class="button" onclick="IgnoreWarning()">Ignore Warning</button>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-xs-12">
                         <div class="row pull-right">
                             <button id="CreateAjax" class="submit button blue hidden">CreateAjax</button>
                             <button id="Create" class="submit button blue hidden">Create</button>
@@ -96,8 +101,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var mode = document.getElementById("mode").value;
-        if (mode == "edit") {
-            editMode()
+        if (mode == "create") {
+            createMode();
         }
         else {
             if (document.getElementById("foodUserID").value == document.getElementById("currentUserID").value) {

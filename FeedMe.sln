@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMe.Domains", "FeedMe.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMe.Services", "FeedMe.Services\FeedMe.Services.csproj", "{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BEA487EC-4BD3-4B4A-BAB2-7FD0E5B08C12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedMe.Repositories.Tests", "FeedMe.Repositories.Test\FeedMe.Repositories.Tests.csproj", "{4A620058-3F81-40EE-81CE-4DCABBF04380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +37,16 @@ Global
 		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D03132A-EF6A-4DCB-94D5-FE8CC1D13C74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A620058-3F81-40EE-81CE-4DCABBF04380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A620058-3F81-40EE-81CE-4DCABBF04380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A620058-3F81-40EE-81CE-4DCABBF04380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A620058-3F81-40EE-81CE-4DCABBF04380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A620058-3F81-40EE-81CE-4DCABBF04380} = {BEA487EC-4BD3-4B4A-BAB2-7FD0E5B08C12}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {95985EF1-7F30-40AC-B47A-04BAC7F8E628}

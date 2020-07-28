@@ -44,9 +44,9 @@ namespace FeedMe.Services
             _FoodRepo.RemoveFoodFromMeal(mealID, foodID, APIFoodID);
             return;
         }
-        public void UpdateFood(string foodName, string foodDesc, int cals, int? macC, int? macF, int? macP, int foodID)
+        public void UpdateFood(string foodName, string foodDesc, string brand, int cals, int? macC, int? macF, int? macP, int foodID)
         {
-            _FoodRepo.UpdateFood(foodName, foodDesc, cals, macC, macF, macP, foodID);
+            _FoodRepo.UpdateFood(foodName, brand, foodDesc, cals, macC, macF, macP, foodID);
         }
         public int CreateFood(string foodName, string foodDesc, string brand, int cals, int? macC, int? macF, int? macP, int creatorID, string APIFoodID, string ImageURL)
         {
