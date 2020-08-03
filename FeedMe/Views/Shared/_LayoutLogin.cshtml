@@ -15,27 +15,28 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico" />
     <style>
         html, body {
             background-color: slategray;
-
         }
+
         .card {
-            width: 600px !important;
+            /*width: 45em !important;*/
             float: none;
             margin: 0 auto;
             border-radius: 2rem;
             padding: 20px;
-            padding-top:10px;
+            padding-top: 10px;
+            background-color: white !important;
         }
-        button{
-            width:100%;
+
+        button {
+            width: 100%;
         }
     </style>
 </head>
 <body>
-
-    @*<partial name="_CookieConsentPartial" />*@
 
     <div class="container body-content">
         @RenderBody()

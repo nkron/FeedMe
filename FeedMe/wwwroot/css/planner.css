@@ -69,7 +69,11 @@
     border-color: #4caf50;
     background-color: #e7ede6;
     padding-left: 8em;
-    padding-top:.5em;
+    padding-top: .5em;
+    padding-right: 3em;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom:20px;
 }
 .PlannerHeader {
     font-size: 28px;
@@ -80,10 +84,6 @@
     font-size: 58px;
     font-family: Avenir, "Lato", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 45px;
-}
-
-.content {
-    padding-top:2em;
 }
 
 .btn-date {

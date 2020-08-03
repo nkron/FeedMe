@@ -14,18 +14,19 @@ namespace FeedMe.Repositories
     {
         private static HttpClient client = new HttpClient();
 
-        public async static Task<List<Food>> SearchFood(string foodName)
+        public async static Task<List<Food>> SearchFood(string foodName, string brand)
         {
-            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a&category=packaged-foods";
+            string Uri = "https://api.edamam.com/api/food-database/v2/parser?app_id=103664a0&app_key=b1ce1d8f2c9a98f79d67f9e3cb070d3a";
             if (foodName == null)
             {
                 //requires a value and dont know what else to do for default
-                Uri += "&ingr=trader joes";
+                Uri += "&ingr=a";
             }
             else
             {
                 Uri += "&ingr=" + foodName;
             }
+            Uri+= "&brand="+brand;
             HttpResponseMessage response = await client.GetAsync(Uri);
 
             if (response.IsSuccessStatusCode)

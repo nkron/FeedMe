@@ -84,7 +84,7 @@ namespace FeedMe.Web.Controllers
         private async Task<List<FoodViewModel>> ExecuteAPISearch(FoodSearchViewModel VM)
         {
             VM.Results.Clear();
-            List<Food> results = (List<Food>)await APIHelper.SearchFood(VM.SearchName);
+            List<Food> results = (List<Food>)await APIHelper.SearchFood(VM.SearchName, VM.Brand);
             foreach (Food f in results)
             {
                 VM.Results.Add(new FoodViewModel(f));

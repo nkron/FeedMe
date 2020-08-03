@@ -4,15 +4,29 @@
     <head>
         <link rel="stylesheet" href="~/css/planner.css" />
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-        $(document).ready(function () {
-            var shownWelcome = localStorage.getItem('shownWelcome');
-            if (shownWelcome && document.getElementById("firstTime").value) {
-                localStorage.setItem('shownWelcome', 1);
-                $('#welcomeModal').modal();
-            }
 
-            $("#popover").popover({ trigger: "hover" });
+        <script type="text/javascript">
+            function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        $(document).ready(function () {
+            var username = getCookie("seenWelcome");
+            if (username == "") {
+                $('#welcomeModal').modal();
+                document.cookie = "seenWelcome=y";
+            }
         });
         $(function () {
             $('#MacroToggle').click(function () {
@@ -101,7 +115,7 @@
                 //different goals have different macro breakdowns
                 switch (goal) {
                     case 0:
-                        Calories -= 400;
+                        Calories *=.9;
                         MacCRatio = 30;
                         MacPRatio = 35;
                         MacFRatio = 35;
@@ -109,7 +123,7 @@
                     case 1:
                         break;
                     case 2:
-                        Calories += 400;
+                        Calories *=1.1;
                         MacCRatio = 50;
                         MacPRatio = 30;
                         MacFRatio = 20;
@@ -136,7 +150,8 @@
 
             }
         }
-        function Accept() {
+            function Accept() {
+                
             $.ajax({
                 type: "POST",
                 url: '/UserProfile/UpdateMacros',
@@ -150,6 +165,7 @@
             $("#TargetMacC").text(MacC + "g");
             $("#TargetMacP").text(MacP + "g");
             $("#TargetMacF").text(MacF + "g");
+            $('#calculatorModal').modal('hide');
         }
 
         google.charts.load('current', { 'packages': ['corechart'] });
@@ -219,7 +235,7 @@
                                 <br />
                                 <p>
                                     The right macros for you are based on your personal Total Daily Energy Expenditure (TDEE) and goals.
-                                </p>   
+                                </p>
                                 <p>
                                     Our macro calculator defaults at the best macro ratio that’s proven to work for the most number of people. You should achieve your goals using the default setting.
                                 </p>
@@ -406,11 +422,11 @@
             </div>
         </div>
     </div>
-    <div class="row" id="body" style="opacity:0">
+    <div id="body" style="opacity:0; margin-bottom:5em;">
         <div class="row PlannerHeaderRow">
-            <div class="PlannerHeader"><span class="feedMePrimary">Meal Planner</span>&nbsp&nbsp<span>@Model.Month @Model.Year</span></div>
+            <div class="PlannerHeader row"><span class="feedMePrimary">Meal Planner</span>&nbsp&nbsp<span>@Model.Month @Model.Year</span></div>
             <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2 vertical-center center-block text-center h4" style="padding-left:0">
+                <div class="col-lg-2 col-md-2 col-sm-2 vertical-center center-block text-center h4">
                     <button class="button btn-date" onclick="location.href='@Url.Action("PreviousDay", "MealPlanner", Model)'">
                         <i class="fas fa-chevron-left"></i>
                     </button>

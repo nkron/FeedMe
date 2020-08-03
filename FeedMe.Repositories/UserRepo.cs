@@ -105,7 +105,9 @@ namespace FeedMe.Repositories
             return IdentityResult.Success;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             throw new NotImplementedException();
         }

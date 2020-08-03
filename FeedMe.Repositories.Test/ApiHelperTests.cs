@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Xunit;
+using FeedMe.Repositories;
 
 namespace FeedMe.Repositories.Tests
 {
