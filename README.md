@@ -1,6 +1,6 @@
 # FeedMe
 
-Check out the site at feedme.fit
+Check out the site at [Feedme.fit](http://feedme.fit)
 
 FeedMe is a meal planning app designed to help those who want easy, basic plans filled with things they already know how to make.
 Other meal plan generators suggest such a wide variety of meals that it often feels like you have to become a chef on the side just to feed yourself.
@@ -19,7 +19,7 @@ Next steps are to expand the scope to include meals composed of individual foods
 FeedMe uses a .net core c# MVC backend, Microsoft SQL Server db, and a bootstrap/javascript/jquery front-end.
 Everything is hosted in the cloud on my personal Azure.
 
-Foods are retrieved from the Edamam Food API and SQL Server backend.
+Foods are retrieved from the [Edamam Food API](https://developer.edamam.com/food-database-api-docs) and combined with SQL Server data.
 
 ## Planned Features
 * Favoriting foods
