@@ -17,6 +17,7 @@ Next steps are to expand the scope to include meals composed of individual foods
 
 ## Design
 FeedMe uses a .net core c# MVC backend, Microsoft SQL Server db, and a bootstrap/javascript/jquery front-end.
+
 Everything is hosted in the cloud on my personal Azure.
 
 Foods are retrieved from the [Edamam Food API](https://developer.edamam.com/food-database-api-docs) and combined with SQL Server data.
