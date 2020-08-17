@@ -16,11 +16,13 @@ Next steps are to expand the scope to include meals composed of individual foods
 * Search a global database for common branded foods and customize them.
 
 ## Design
-FeedMe uses a .net core c# MVC backend, Microsoft SQL Server db, and a bootstrap/javascript/jquery front-end.
+FeedMe uses a .net core c# MVC back-end, Microsoft SQL Server db, and a bootstrap/javascript/jquery front-end.
 
 Everything is hosted in the cloud on my personal Azure.
 
 Foods are retrieved from the [Edamam Food API](https://developer.edamam.com/food-database-api-docs) and combined with SQL Server data.
+
+*Some best practices are ignored for the sake of time - ideally all classes would have their own interfaces for example
 
 ## Planned Features
 * Favoriting foods
